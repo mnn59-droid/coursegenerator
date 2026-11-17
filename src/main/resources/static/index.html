@@ -1,1728 +1,1984 @@
-.outline {//here I will give you the codes until the end
-    background:#eaf7ff;
-    color:#176b99;
-    border-color:#b9dff3
-}
-.outline:hover {
-    background:#d7f0ff
-}
-.settings .primary {
-    width:100%;
-    margin-top:2px
-}
-.status {
-    font-size:12px;
-    color:#5e8195;
-    margin:13px 0 0
-}
-.metrics {
-    display:grid;
-    grid-template-columns:repeat(3,minmax(0,1fr));
-    gap:14px
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content ="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Calculus Test Generator</title>
+    <style>
+        :root{
+            --sky:#d8f0ff;
+            --pale:#f2faff;
+            --blue:#2189c5;
+            --deep:#194c6c;
+            --text:#253f51;
+            --muted:#638093;
+            --line:#d538f3;
+            --white:#fff;
+        }
+        *{
+            box-sizing: border-box;
+        }
+        body{
+            margin:0;
+            font-family:Arial, Helvetica, sans-serif;
+            line-height:1.6;
+            background:#f5fbff;
+            color:var(--text);
+        }
+        button,input,select{font:inherit;}
+        button{
+            cursor:pointer;
+        }
+        .topbar{
+            background:#e1f3ff;
+            border-bottom:1px solid #c9e6f7;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:18px max(25px, calc((100vw - 1180px) / 2));
+            gap:20px
+        }
+        .logo{
+            display:flex;
+            align-items:center;
+            gap:15px;
+            color:var(--deep)
+        }
+        .logo-mark{
+            display:grid;
+            place-items:center;
+            width:49px;
+            height:49px;
+            border-radius:14px;
+            background:#b9e4fc;
+            font-size:33px;
+            font-weight:bold
+        }
+        .logo strong{
+            display:block;
+            font-size:21px;
+            line-height:1.25
+        }
+        .logo small{
+            display:block;
+            font-size:12px;
+            letter-spacing: .04em;
+            color:var(--muted);
+            margin-top:4px;
+        }
+        .header-tag{
+            background:white;
+            border:1px solid #c9e5f5;
+            border-radius:25px;
+            padding:8px 15px;
+            font-size:12px;
+            color:var(--deep);
+            font-weight:bold
+        }
+        main{
+            max-width:1220px;
+            margin:auto;
+            padding:30px 22px
+        }
+        .welcome {
+             display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:20px;
+            padding: 37px 42px;
+            background:linear-gradient(115deg,#d33dff,#eff9ff);
+            border:1px solid #c9e6f6;
+            border-radius:20px;
+            margin-bottom:27px;
+        }
+        .welcome h1 {
+            font-size:clamp(27px,3.5vw,42px);
+            line-height:1.2;
+            color:#174e72;
+            margin:11px 0
+        }
+        .welcome p {
+            max-width:690px;
+            margin:0;
+            color:#52748b
+        }
+        .eyebrow {
+            font-size:11px;
+            letter-spacing:.16em;
+            font-weight:bold;
+            color:#277fb4
+        }
+        .hero-icon{
+            font-size:31px;
+            white-space:nowrap;
+            color:#388bbb;
+            background:#ffffff99;
+            border:1px solid #c5e5f6;
+            padding:20px 25px;
+            border-radius:18px;
+        }
+        .tabs {
+            display:flex;
+            flex-wrap:wrap;
+            gap:12px;
+            border-bottom:1px solid #d1e6f2;
+            padding:0 4px 13px;
+            margin-bottom:22px
+        }
+        .tab{
+            border:1px solid transparent;
+            border-radius:10px;
+            padding:12px 20px;
+            background:transparent;
+            color:#56788c;
+            font-weight:bold;
+        }
+        .tab:hover {
+            background: #e6f5ff
+        }
+        .tab.active {
+            background:#d7efff;
+            color:#125c89;
+            border-color:#b8def3
+        }
+        .tab-panel{
+            display:none;
+        }
+        .tab-panel.active {
+            display:block;
+        }
+        .workspace {
+            display:grid;
+            grid-template-columns:370px minmax(0,1fr);
+            gap:22px
+        }
+        .card{
+            background:white;
+            border:1px solid var(--line);
+            border-radius:18px;
+            padding:29px;
+            box-shadow:0 5px 24px #155f870a
+        }
+        .section-heading{
+            display:flex;
+            align-items:center;
+            gap:14px;
+            margin-bottom:22px;
+        }
+        .step {
+            display:grid;
+            place-items:center;
+            min-width:43px;
+            height:43px;
+            background:#d9f1ff;
+            color:#2378a8;
+            border-radius:12px;
+            font-weight:bold
+        }
+        .section-heading h2 {
+            font-size:22px;
+            color:var(--deep);
+            line-height:1.3;
+            margin:0
+        }
+        .section-heading p{
+            font-size:13px;
+            color:var(--muted);
+            margin:4px 0 0
+        }
+        label {
+            display:block;
+            font-size:13px;
+            font-weight:bold;
+            color:#345a70;
+            margin:17px 0  7px
+        }
+        select,input:not([type=checkbox]){
+            display:block;
+            width:100%;
+            min-height:46px;
+            border:1px solid #b9d9eb;
+            background:#fbfeff;
+            border-radius:9px;
+            padding:10px 13px;
+            color:#234d65
+        }
+        select:focus,input:focus,button:focus-visible{
+            outline:3px solid #a4dcff;
+            outline-offset:2px
+        }
+        .two-fields{
+            display: grid;
+            grid-template-columns:1fr 1fr;
+            gap:15px
+        }
+        .check{
+            display:flex;
+            align-items:center;
+            gap:11px;
+            margin:22px 0
+        }
+        .check input {
+            width:17px;
+            height:17px;
+            accent-color:#278fc9
+        }
+        .primary,.outline{
+            border-radius:10px;
+            padding:12px 19px;
+            font-size:14px;
+            font-weight:bold;
+            border:1px solid #2488c0
+        }
+        .primary{
+            background: #278fc9;
+            color:white
+        }
+        .primary:hover{
+            background:#176d9f
+        }
+        .outline{
+            background:#eaf7ff;
+            color:#176b99;
+            border-color:#b9dff3
+        }
+        .outline:hover{
+            background:#d7f0ff;
+        }
+        .settings .primary{
+            width:100%;
+            margin-top:2px;
+        }
+        .status{
+            font-size:12px;
+            color:#5e8195;
+            margin:13px 0 0
+        }
+        .outline {//here I will give you the codes until the end
+        background:#eaf7ff;
+            color:#176b99;
+            border-color:#b9dff3
+        }
+        .outline:hover {
+            background:#d7f0ff
+        }
+        .settings .primary {
+            width:100%;
+            margin-top:2px
+        }
+        .status {
+            font-size:12px;
+            color:#5e8195;
+            margin:13px 0 0
+        }
+        .metrics {
+            display:grid;
+            grid-template-columns:repeat(3,minmax(0,1fr));
+            gap:14px
+        }
 
-.metric {
-    background:#eef9ff;
-    border:1px solid #d3ebf8;
-    border-radius:14px;
-    padding:20px 14px
-}
+        .metric {
+            background:#eef9ff;
+            border:1px solid #d3ebf8;
+            border-radius:14px;
+            padding:20px 14px
+        }
 
-.metric strong {
-    display:block;
-    font-size:31px;
-    color:#1973a6;
-    line-height:1.2
-}
+        .metric strong {
+            display:block;
+            font-size:31px;
+            color:#1973a6;
+            line-height:1.2
+        }
 
-.metric span {
-    display:block;
-    font-size:12px;
-    color:#587d93;
-    margin-top:8px
-}
+        .metric span {
+            display:block;
+            font-size:12px;
+            color:#587d93;
+            margin-top:8px
+        }
 
-.info {
-    margin-top:26px;
-    padding:23px;
-    border-radius:14px;
-    background:#f7fcff;
-    border:1px solid #e0eff8
-}
+        .info {
+            margin-top:26px;
+            padding:23px;
+            border-radius:14px;
+            background:#f7fcff;
+            border:1px solid #e0eff8
+        }
 
-.info h3 {
-    margin:0 0 8px;
-    color:var(--deep)
-}
+        .info h3 {
+            margin:0 0 8px;
+            color:var(--deep)
+        }
 
-.info p {
-    margin:0;
-    color:#56758a;
-    font-size:14px
-}
+        .info p {
+            margin:0;
+            color:#56758a;
+            font-size:14px
+        }
 
-.actions {
-    display:flex;
-    flex-wrap:wrap;
-    gap:12px;
-    margin-top:20px
-}
+        .actions {
+            display:flex;
+            flex-wrap:wrap;
+            gap:12px;
+            margin-top:20px
+        }
 
-.topic-grid {
-    display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:14px
-}
+        .topic-grid {
+            display:grid;
+            grid-template-columns:repeat(2,minmax(0,1fr));
+            gap:14px
+        }
 
-.topic-card {
-    display:flex;
-    flex-direction:column;
-    align-items:flex-start;
-    text-align:left;
-    gap:7px;
-    padding:20px;
-    border-radius:13px;
-    background:#f4fbff;
-    border:1px solid #d4eaf7;
-    color:var(--text)
-}
+        .topic-card {
+            display:flex;
+            flex-direction:column;
+            align-items:flex-start;
+            text-align:left;
+            gap:7px;
+            padding:20px;
+            border-radius:13px;
+            background:#f4fbff;
+            border:1px solid #d4eaf7;
+            color:var(--text)
+        }
 
-.topic-card:hover {
-    background:#e3f5ff;
-    border-color:#9bd1ef
-}
+        .topic-card:hover {
+            background:#e3f5ff;
+            border-color:#9bd1ef
+        }
 
-.topic-number {
-    font-size:12px;
-    font-weight:bold;
-    color:#348fbe
-}
+        .topic-number {
+            font-size:12px;
+            font-weight:bold;
+            color:#348fbe
+        }
 
-.topic-card strong {
-    font-size:16px
-}
+        .topic-card strong {
+            font-size:16px
+        }
 
-.topic-card span:not(.topic-number) {
-    font-size:12px;
-    color:var(--muted)
-}
+        .topic-card span:not(.topic-number) {
+            font-size:12px;
+            color:var(--muted)
+        }
 
-.topic-card .topic-link {
-    color:#197bb2!important;
-    font-weight:bold;
-    margin-top:5px
-}
+        .topic-card .topic-link {
+            color:#197bb2!important;
+            font-weight:bold;
+            margin-top:5px
+        }
 
-.preview-toolbar {
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:20px;
-    border-bottom:1px solid var(--line);
-    padding-bottom:18px;
-    margin-bottom:22px
-}
+        .preview-toolbar {
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:20px;
+            border-bottom:1px solid var(--line);
+            padding-bottom:18px;
+            margin-bottom:22px
+        }
 
-.preview-toolbar h2 {
-    margin:6px 0 0;
-    color:var(--deep)
-}
+        .preview-toolbar h2 {
+            margin:6px 0 0;
+            color:var(--deep)
+        }
 
-.preview-toolbar .actions {
-    margin:0
-}
+        .preview-toolbar .actions {
+            margin:0
+        }
 
-.compact {
-    white-space:nowrap
-}
+        .compact {
+            white-space:nowrap
+        }
 
-.placeholder {
-    text-align:center;
-    padding:65px 20px;
-    background:#f3fbff;
-    border:1px dashed #b9ddf0;
-    border-radius:13px;
-    color:#66879a
-}
+        .placeholder {
+            text-align:center;
+            padding:65px 20px;
+            background:#f3fbff;
+            border:1px dashed #b9ddf0;
+            border-radius:13px;
+            color:#66879a
+        }
 
-.test-meta {
-    padding:15px 0;
-    border-bottom:2px solid #cde7f6;
-    margin-bottom:12px;
-    font-size:14px
-}
+        .test-meta {
+            padding:15px 0;
+            border-bottom:2px solid #cde7f6;
+            margin-bottom:12px;
+            font-size:14px
+        }
 
-.test-meta p {
-    margin:7px 0
-}
+        .test-meta p {
+            margin:7px 0
+        }
 
-.question {
-    padding:18px 0;
-    border-bottom:1px solid #e1edf4;
-    break-inside:avoid
-}
+        .question {
+            padding:18px 0;
+            border-bottom:1px solid #e1edf4;
+            break-inside:avoid
+        }
 
-.question p {
-    margin:9px 0;
-    font-size:16px
-}
+        .question p {
+            margin:9px 0;
+            font-size:16px
+        }
 
-.question-label {
-    font-size:12px;
-    color:#6b8b9d
-}
+        .question-label {
+            font-size:12px;
+            color:#6b8b9d
+        }
 
-.point-label {
-    font-size:12px;
-    color:#658499
-}
+        .point-label {
+            font-size:12px;
+            color:#658499
+        }
 
-.answer-space {
-    height:55px;
-    border-bottom:1px dotted #c3d8e4
-}
+        .answer-space {
+            height:55px;
+            border-bottom:1px dotted #c3d8e4
+        }
 
-.key-row {
-    padding:13px 0;
-    border-bottom:1px solid #e0edf5;
-    break-inside:avoid
-}
+        .key-row {
+            padding:13px 0;
+            border-bottom:1px solid #e0edf5;
+            break-inside:avoid
+        }
 
-footer {
-    text-align:center;
-    padding:30px;
-    color:#7892a2;
-    font-size:12px
-}
+        footer {
+            text-align:center;
+            padding:30px;
+            color:#7892a2;
+            font-size:12px
+        }
 
-@media(max-width:850px) {
-.workspace {
-    grid-template-columns:1fr
-}
+        @media(max-width:850px) {
+            .workspace {
+                grid-template-columns:1fr
+            }
 
-.hero-icon {
-    display:none
-}
+            .hero-icon {
+                display:none
+            }
 
-.welcome {
-    padding:27px
-}
+            .welcome {
+                padding:27px
+            }
 
-.preview-toolbar {
-    align-items:flex-start;
-    flex-direction:column
-}
-
-
-}
-
-@media(max-width:520px) {
-.header-tag {
-    display:none
-}
-
-.card {
-    padding:20px
-}
-
-.metrics {
-    grid-template-columns:1fr 1fr
-}
-
-.topic-grid {
-    grid-template-columns:1fr
-}
-
-.tabs {
-    gap:5px
-}
-
-.tab {
-    padding:10px 12px;
-    font-size:13px
-}
-
-.two-fields {
-    grid-template-columns:1fr
-}
+            .preview-toolbar {
+                align-items:flex-start;
+                flex-direction:column
+            }
 
 
-}
+        }
 
-@media print {
-body {
-    background:white
-}
+        @media(max-width:520px) {
+            .header-tag {
+                display:none
+            }
 
-header,.welcome,.tabs,footer,.preview-toolbar .actions,.settings,.overview {
-    display:none!important
-}
+            .card {
+                padding:20px
+            }
 
-main {
-    padding:0;
-    max-width:none
-}
+            .metrics {
+                grid-template-columns:1fr 1fr
+            }
 
-.card {
-    padding:0;
-    border:none;
-    box-shadow:none
-}
+            .topic-grid {
+                grid-template-columns:1fr
+            }
 
-.tab-panel {
-    display:none!important
-}
+            .tabs {
+                gap:5px
+            }
 
-.tab-panel.active {
-    display:block!important
-}
+            .tab {
+                padding:10px 12px;
+                font-size:13px
+            }
 
-.question {
-    break-inside:avoid
-}
-
-.paper {
-    border:none
-}
+            .two-fields {
+                grid-template-columns:1fr
+            }
 
 
-}
+        }
 
-/* Blue-only hard override */ :root {
-    color-scheme:light
-}
+        @media print {
+            body {
+                background:white
+            }
 
-button.primary {
-    background:#167cbb!important;
-    color:#fff!important
-}
+            header,.welcome,.tabs,footer,.preview-toolbar .actions,.settings,.overview {
+                display:none!important
+            }
 
-body {
-    background:#f0f9ff!important
-}
+            main {
+                padding:0;
+                max-width:none
+            }
 
-header.topbar {
-    background:#d8efff!important
-}
+            .card {
+                padding:0;
+                border:none;
+                box-shadow:none
+            }
 
-.welcome {
-    background:linear-gradient(115deg,#d2edff,#f4fbff)!important
-}
-  </style>
- <style>
+            .tab-panel {
+                display:none!important
+            }
 
-/* Student response windows and built-in calculus tutor */
-.student-work{margin-top:14px;padding:14px;border:1px solid #c9d9ef;border-radius:12px;background:#f4f8ff}
-.student-work label{display:block;font-weight:650;margin-bottom:8px;color:#17375e}
-.student-answer{width:100%;box-sizing:border-box;min-height:85px;padding:12px;border:1px solid #a9bfdd;border-radius:8px;background:white;font:inherit;resize:vertical;color:#17263b}
-.student-controls{display:flex;flex-wrap:wrap;gap:9px;margin-top:9px}
-.student-controls button,#chat-send{border:0;border-radius:8px;padding:9px 13px;cursor:pointer;background:#2057a4;color:white;font:inherit;font-weight:600}
-.student-controls .ask-question{background:#0b7775}
-.answer-feedback{margin-top:9px;font-weight:600}.answer-feedback.correct{color:#176537}.answer-feedback.incorrect{color:#9a3c1c}
-.chat-panel{margin-top:22px;padding:20px;border:1px solid #bbd3e9;border-radius:14px;background:#eef6ff}
-.chat-panel h3{margin:0 0 6px;color:#183b67}.chat-panel p{margin:0 0 12px}
-.chat-history{max-height:400px;overflow:auto;background:white;border:1px solid #d0ddec;border-radius:10px;padding:12px;min-height:75px;margin-bottom:12px}
-.chat-message{white-space:pre-wrap;line-height:1.6;padding:11px;margin:7px 0;border-radius:9px;background:#edf3fc}
-.chat-message.student{background:#dff5ee}.chat-question,.chat-input{width:100%;box-sizing:border-box;border:1px solid #b4c9df;border-radius:8px;padding:10px;font:inherit;margin-bottom:9px;background:white;color:#17263b}
-@media print{.student-controls,.answer-feedback,.chat-panel{display:none!important}.student-work{background:white;border:1px solid #ccc}.student-answer{border:1px solid #bbb}}
+            .tab-panel.active {
+                display:block!important
+            }
 
-</style>
+            .question {
+                break-inside:avoid
+            }
+
+            .paper {
+                border:none
+            }
+
+
+        }
+
+        /* Blue-only hard override */ :root {
+                                          color-scheme:light
+                                      }
+
+        button.primary {
+            background:#167cbb!important;
+            color:#fff!important
+        }
+
+        body {
+            background:#f0f9ff!important
+        }
+
+        header.topbar {
+            background:#d8efff!important
+        }
+
+        .welcome {
+            background:linear-gradient(115deg,#d2edff,#f4fbff)!important
+        }
+    </style>
+    <style>
+
+        /* Student response windows and built-in calculus tutor */
+        .student-work{margin-top:14px;padding:14px;border:1px solid #c9d9ef;border-radius:12px;background:#f4f8ff}
+        .student-work label{display:block;font-weight:650;margin-bottom:8px;color:#17375e}
+        .student-answer{width:100%;box-sizing:border-box;min-height:85px;padding:12px;border:1px solid #a9bfdd;border-radius:8px;background:white;font:inherit;resize:vertical;color:#17263b}
+        .student-controls{display:flex;flex-wrap:wrap;gap:9px;margin-top:9px}
+        .student-controls button,#chat-send{border:0;border-radius:8px;padding:9px 13px;cursor:pointer;background:#2057a4;color:white;font:inherit;font-weight:600}
+        .student-controls .ask-question{background:#0b7775}
+        .answer-feedback{margin-top:9px;font-weight:600}.answer-feedback.correct{color:#176537}.answer-feedback.incorrect{color:#9a3c1c}
+        .chat-panel{margin-top:22px;padding:20px;border:1px solid #bbd3e9;border-radius:14px;background:#eef6ff}
+        .chat-panel h3{margin:0 0 6px;color:#183b67}.chat-panel p{margin:0 0 12px}
+        .chat-history{max-height:400px;overflow:auto;background:white;border:1px solid #d0ddec;border-radius:10px;padding:12px;min-height:75px;margin-bottom:12px}
+        .chat-message{white-space:pre-wrap;line-height:1.6;padding:11px;margin:7px 0;border-radius:9px;background:#edf3fc}
+        .chat-message.student{background:#dff5ee}.chat-question,.chat-input{width:100%;box-sizing:border-box;border:1px solid #b4c9df;border-radius:8px;padding:10px;font:inherit;margin-bottom:9px;background:white;color:#17263b}
+        @media print{.student-controls,.answer-feedback,.chat-panel{display:none!important}.student-work{background:white;border:1px solid #ccc}.student-answer{border:1px solid #bbb}}
+
+    </style>
 </head>
- <body>
-  <header class="topbar">
-   <div class="logo">
+<body>
+<header class="topbar">
+    <div class="logo">
     <span class="logo-mark">
      ∫
     </span>
-    <div>
-     <strong>
-      Calculus Test Generator
-     </strong>
+        <div>
+            <strong>
+                Calculus Test Generator
+            </strong>
+        </div>
     </div>
-   </div>
-  </header>
-  <main>
-   <section class="welcome">
-    <div>
+</header>
+<main>
+    <section class="welcome">
+        <div>
      <span class="eyebrow">
       ASSESSMENT DESIGN MADE SIMPLE
      </span>
-     <h1>
-      Create your calculus tests.
-     </h1>
-     <p>
-      Choose a topic, configure your assessment, and create a printable test with a separate instructor answer key.
-     </p>
-    </div>
-    <div class="hero-icon">
-     ∫ f(x) dx
-    </div>
-   </section>
-   <nav aria-label="Workspace sections" class="tabs">
-    <button class="tab active" data-tab="builder" type="button">
-     Test Builder
-    </button>
-    <button class="tab" data-tab="topics" type="button">
-     Browse Topics
-    </button>
-    <button class="tab" data-tab="preview" type="button">
-     Test Preview
-    </button>
-    <button class="tab" data-tab="answers" type="button">
-     Answer Key
-    </button>
-   </nav>
-   <section class="tab-panel active" id="builder">
-    <div class="workspace">
-     <aside class="card settings">
-      <div class="section-heading">
+            <h1>
+                Create your calculus tests.
+            </h1>
+            <p>
+                Choose a topic, configure your assessment, and create a printable test with a separate instructor answer key.
+            </p>
+        </div>
+        <div class="hero-icon">
+            ∫ f(x) dx
+        </div>
+    </section>
+    <nav aria-label="Workspace sections" class="tabs">
+        <button class="tab active" data-tab="builder" type="button">
+            Test Builder
+        </button>
+        <button class="tab" data-tab="topics" type="button">
+            Browse Topics
+        </button>
+        <button class="tab" data-tab="preview" type="button">
+            Test Preview
+        </button>
+        <button class="tab" data-tab="answers" type="button">
+            Answer Key
+        </button>
+    </nav>
+    <section class="tab-panel active" id="builder">
+        <div class="workspace">
+            <aside class="card settings">
+                <div class="section-heading">
        <span class="step">
         01
        </span>
-       <div>
-        <h2>
-         Test Settings
-        </h2>
-        <p>
-         Customize your assessment
-        </p>
-       </div>
-      </div>
-      <label for="topic">
-       Calculus topic
-      </label>
-      <select id="topic">
-       <option value="ALL">
-        All topics (mixed test)
-       </option>
-      </select>
-      <label for="count">
-       Number of questions
-      </label>
-      <select id="count">
-       <option value="5">
-        5 questions
-       </option>
-       <option selected="" value="10">
-        10 questions
-       </option>
-       <option value="15">
-        15 questions
-       </option>
-       <option value="20">
-        20 questions
-       </option>
-       <option value="30">
-        30 questions
-       </option>
-      </select>
-      <label for="title">
-       Test title
-      </label>
-      <input id="title" maxlength="90" value="Calculus Assessment"/>
-      <div class="two-fields">
-       <div>
-        <label for="duration">
-         Duration (minutes)
-        </label>
-        <input id="duration" max="300" min="1" type="number" value="60"/>
-       </div>
-       <div>
-        <label for="points">
-         Points per question
-        </label>
-        <input id="points" max="100" min="1" type="number" value="5"/>
-       </div>
-      </div>
-      <label class="check">
-       <input checked="" id="shuffle" type="checkbox"/>
-       <span>
+                    <div>
+                        <h2>
+                            Test Settings
+                        </h2>
+                        <p>
+                            Customize your assessment
+                        </p>
+                    </div>
+                </div>
+                <label for="topic">
+                    Calculus topic
+                </label>
+                <select id="topic">
+                    <option value="ALL">
+                        All topics (mixed test)
+                    </option>
+                </select>
+                <label for="count">
+                    Number of questions
+                </label>
+                <select id="count">
+                    <option value="5">
+                        5 questions
+                    </option>
+                    <option selected="" value="10">
+                        10 questions
+                    </option>
+                    <option value="15">
+                        15 questions
+                    </option>
+                    <option value="20">
+                        20 questions
+                    </option>
+                    <option value="30">
+                        30 questions
+                    </option>
+                </select>
+                <label for="title">
+                    Test title
+                </label>
+                <input id="title" maxlength="90" value="Calculus Assessment"/>
+                <div class="two-fields">
+                    <div>
+                        <label for="duration">
+                            Duration (minutes)
+                        </label>
+                        <input id="duration" max="300" min="1" type="number" value="60"/>
+                    </div>
+                    <div>
+                        <label for="points">
+                            Points per question
+                        </label>
+                        <input id="points" max="100" min="1" type="number" value="5"/>
+                    </div>
+                </div>
+                <label class="check">
+                    <input checked="" id="shuffle" type="checkbox"/>
+                    <span>
         Shuffle questions
        </span>
-      </label>
-      <button class="primary" id="generate" type="button">
-       Generate Test →
-      </button>
-      <p class="status" id="status" role="status">
-       Ready to generate your test.
-      </p>
-     </aside>
-     <div class="card overview">
-      <div class="section-heading">
+                </label>
+                <button class="primary" id="generate" type="button">
+                    Generate Test →
+                </button>
+                <p class="status" id="status" role="status">
+                    Ready to generate your test.
+                </p>
+            </aside>
+            <div class="card overview">
+                <div class="section-heading">
        <span class="step">
         02
        </span>
-       <div>
-        <h2>
-         Assessment Overview
-        </h2>
-        <p>
-         Your test at a glance
-        </p>
-       </div>
-      </div>
-      <div class="metrics">
-       <div class="metric">
-        <strong id="metric-topics">
-         10
-        </strong>
-        <span>
+                    <div>
+                        <h2>
+                            Assessment Overview
+                        </h2>
+                        <p>
+                            Your test at a glance
+                        </p>
+                    </div>
+                </div>
+                <div class="metrics">
+                    <div class="metric">
+                        <strong id="metric-topics">
+                            10
+                        </strong>
+                        <span>
          Calculus topics
         </span>
-       </div>
-       <div class="metric">
-        <strong id="metric-types">
-         100
-        </strong>
-        <span>
+                    </div>
+                    <div class="metric">
+                        <strong id="metric-types">
+                            100
+                        </strong>
+                        <span>
          Question types
         </span>
-       </div>
-       <div class="metric">
-        <strong id="metric-questions">
-         10
-        </strong>
-        <span>
+                    </div>
+                    <div class="metric">
+                        <strong id="metric-questions">
+                            10
+                        </strong>
+                        <span>
          Selected questions
         </span>
-       </div>
-      </div>
-      <div class="info">
-       <h3>
-        How it works
-       </h3>
-       <p>
-        Choose a calculus topic or combine all topics. Select the number of questions, then generate your test. Use the preview and answer-key tabs to review or print your assessment.
-       </p>
-      </div>
-      <div class="actions">
-       <button class="outline" id="go-topics" type="button">
-        Explore Topics
-       </button>
-       <button class="outline" id="go-preview" type="button">
-        Open Preview
-       </button>
-      </div>
-     </div>
-    </div>
-   </section>
-   <section class="tab-panel" id="topics">
-    <div class="card">
-     <div class="section-heading">
+                    </div>
+                </div>
+                <div class="info">
+                    <h3>
+                        How it works
+                    </h3>
+                    <p>
+                        Choose a calculus topic or combine all topics. Select the number of questions, then generate your test. Use the preview and answer-key tabs to review or print your assessment.
+                    </p>
+                </div>
+                <div class="actions">
+                    <button class="outline" id="go-topics" type="button">
+                        Explore Topics
+                    </button>
+                    <button class="outline" id="go-preview" type="button">
+                        Open Preview
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="tab-panel" id="topics">
+        <div class="card">
+            <div class="section-heading">
       <span class="step">
        03
       </span>
-      <div>
-       <h2>
-        Calculus Topic Library
-       </h2>
-       <p>
-        Choose from 10 subject areas, each with 10 question types
-       </p>
-      </div>
-     </div>
-     <div class="topic-grid" id="topic-grid">
-     </div>
-    </div>
-   </section>
-   <section class="tab-panel" id="preview">
-    <div class="card paper">
-     <div class="preview-toolbar">
-      <div>
+                <div>
+                    <h2>
+                        Calculus Topic Library
+                    </h2>
+                    <p>
+                        Choose from 10 subject areas, each with 10 question types
+                    </p>
+                </div>
+            </div>
+            <div class="topic-grid" id="topic-grid">
+            </div>
+        </div>
+    </section>
+    <section class="tab-panel" id="preview">
+        <div class="card paper">
+            <div class="preview-toolbar">
+                <div>
        <span class="eyebrow">
         STUDENT VERSION
        </span>
-       <h2 id="test-heading">
-        Test Preview
-       </h2>
-      </div>
-      <div class="actions">
-       <button class="outline" id="print" type="button">
-        Print Student Test
-       </button>
-       <button class="primary compact" id="preview-key" type="button">
-        View Answer Key
-       </button>
-      </div>
-     </div>
-     <div class="placeholder" id="test-output">
-      No test generated yet. Visit Test Builder and click Generate Test.
-     </div>
-    </div>
-   </section>
-<section class="chat-panel" id="chat-panel" aria-label="Calculus help chatbot"><h3>Calculus Help Chatbot</h3><p>Select a question or type its question number or exact text to see the method and answer.</p><div class="chat-history" id="chat-history" aria-live="polite"><div class="chat-message tutor">Hello! Generate a test, then choose a question and ask me to explain it step by step.</div></div><select class="chat-question" id="chat-question" aria-label="Choose test question"><option value="">Choose a question (optional)</option></select><textarea class="chat-input" id="chat-input" rows="2" placeholder="Example: Question 2 — please show the steps"></textarea><button type="button" id="chat-send">Ask chatbot</button></section>
-   <section class="tab-panel" id="answers">
-    <div class="card paper">
-     <div class="preview-toolbar">
-      <div>
+                    <h2 id="test-heading">
+                        Test Preview
+                    </h2>
+                </div>
+                <div class="actions">
+                    <button class="outline" id="print" type="button">
+                        Print Student Test
+                    </button>
+                    <button class="primary compact" id="preview-key" type="button">
+                        View Answer Key
+                    </button>
+                </div>
+            </div>
+            <div class="placeholder" id="test-output">
+                No test generated yet. Visit Test Builder and click Generate Test.
+            </div>
+        </div>
+    </section>
+    <section class="chat-panel" id="chat-panel" aria-label="Calculus help chatbot"><h3>Calculus Help Chatbot</h3><p>Select a question or type its question number or exact text to see the method and answer.</p><div class="chat-history" id="chat-history" aria-live="polite"><div class="chat-message tutor">Hello! Generate a test, then choose a question and ask me to explain it step by step.</div></div><select class="chat-question" id="chat-question" aria-label="Choose test question"><option value="">Choose a question (optional)</option></select><textarea class="chat-input" id="chat-input" rows="2" placeholder="Example: Question 2 — please show the steps"></textarea><button type="button" id="chat-send">Ask chatbot</button></section>
+    <section class="tab-panel" id="answers">
+        <div class="card paper">
+            <div class="preview-toolbar">
+                <div>
        <span class="eyebrow">
         INSTRUCTOR VERSION
        </span>
-       <h2>
-        Answer Key
-       </h2>
-      </div>
-      <button class="primary compact" id="keyprint" type="button">
-       Print Answer Key
-      </button>
-     </div>
-     <div class="placeholder" id="answer-output">
-      Generate a test to view the answer key.
-     </div>
-    </div>
-   </section>
-  </main>
-  <footer>
-   Calculus Test Generator • Spring Boot Learning Application
-  </footer>
-  <script>
-window.CALCULUS_BANK = {
-  "Limits & Continuity": [
-    [
-      "Direct substitution",
-      "Evaluate lim as x→2 of (x² + 3x).",
-      "10"
-    ],
-    [
-      "Factor and cancel",
-      "Evaluate lim as x→3 of (x² − 9)/(x − 3).",
-      "6"
-    ],
-    [
-      "Rationalization",
-      "Evaluate lim as x→0 of (√(x+4) − 2)/x.",
-      "1/4"
-    ],
-    [
-      "Trigonometric limit",
-      "Evaluate lim as x→0 of sin(5x)/x.",
-      "5"
-    ],
-    [
-      "One-sided limit",
-      "Evaluate lim as x→0⁺ of |x|/x.",
-      "1"
-    ],
-    [
-      "Infinite limit",
-      "Evaluate lim as x→2⁺ of 1/(x−2).",
-      "+∞"
-    ],
-    [
-      "At infinity",
-      "Evaluate lim as x→∞ of (3x²+2)/(x²−1).",
-      "3"
-    ],
-    [
-      "Continuity parameter",
-      "Find k so f(x) = (x²−4)/(x−2) for x≠2 and f(2)=k is continuous.",
-      "4"
-    ],
-    [
-      "Squeeze theorem",
-      "Evaluate lim as x→0 of x² sin(1/x).",
-      "0"
-    ],
-    [
-      "Exponential limit",
-      "Evaluate lim as x→0 of (e^(3x)−1)/x.",
-      "3"
-    ],
-    [
-      "Limit table (p. 2)",
-      "Estimate lim f(x) as x→3 given f(2.9)=−5.6, f(2.99)=−4.16, f(2.999)=−4.016.",
-      "−4"
-    ],
-    [
-      "Limit table (p. 2)",
-      "Estimate lim f(x) as x→−5 given f(−5.1)=3.9, f(−5.01)=2.45, f(−5.001)=2.045.",
-      "2"
-    ],
-    [
-      "Direct limit (p. 4)",
-      "Evaluate lim x→4 of (−2x+5).",
-      "−3"
-    ],
-    [
-      "Polynomial limit (p. 4)",
-      "Evaluate lim t→−2 of (t³−2t+5).",
-      "1"
-    ],
-    [
-      "Factoring limit (p. 4)",
-      "Evaluate lim x→1 of (x²−1)/(x−1).",
-      "2"
-    ],
-    [
-      "Factoring limit (p. 4)",
-      "Evaluate lim x→4 of (x²−16)/(4−x).",
-      "−8"
-    ],
-    [
-      "Factoring limit (p. 4)",
-      "Evaluate lim t→2 of (3t²−7t+2)/(t−2).",
-      "5"
-    ],
-    [
-      "Conjugate limit (p. 4)",
-      "Evaluate lim x→9 of (√x−3)/(x−9).",
-      "1/6"
-    ],
-    [
-      "Difference quotient (p. 4)",
-      "Evaluate lim h→0 of ((5+h)²−25)/h.",
-      "10"
-    ],
-    [
-      "Infinite limit (p. 5)",
-      "Evaluate lim x→3 of 1/(x−3)².",
-      "+∞"
-    ],
-    [
-      "Infinity limit (p. 5)",
-      "Evaluate lim x→−∞ of (4x²+3x−5)/(x²+1).",
-      "4"
-    ],
-    [
-      "Infinity limit (p. 5)",
-      "Evaluate lim x→∞ of (6x²−9x+8)/(3x²+2).",
-      "2"
-    ],
-    [
-      "Infinity limit (p. 5)",
-      "Evaluate lim x→∞ of (6x²−9x+8)/(3x³+2).",
-      "0"
-    ],
-    [
-      "Sine limit (p. 5)",
-      "Evaluate lim x→0 of sin(3x)/x.",
-      "3"
-    ],
-    [
-      "Sine limit (p. 5)",
-      "Evaluate lim x→0 of sin(5x)/tan(2x).",
-      "5/2"
-    ],
-    [
-      "Piecewise continuity (p. 6)",
-      "For f(x)=(x²−1)/(x−1) if x≠1 and f(1)=3, is f continuous at 1?",
-      "No; limit is 2 but f(1)=3."
-    ],
-    [
-      "IVT (p. 6)",
-      "Show that 2x³+x−2=0 has a root on [−1,1].",
-      "f(−1)=−5 and f(1)=1; by IVT a root exists."
-    ]
-  ],
-  "Derivatives": [
-    [
-      "Power rule",
-      "Differentiate f(x)=x⁷.",
-      "7x⁶"
-    ],
-    [
-      "Polynomial rule",
-      "Differentiate f(x)=4x³−5x+2.",
-      "12x²−5"
-    ],
-    [
-      "Product rule",
-      "Differentiate f(x)=x² sin(x).",
-      "2x sin(x)+x² cos(x)"
-    ],
-    [
-      "Quotient rule",
-      "Differentiate f(x)=x/(x+1).",
-      "1/(x+1)²"
-    ],
-    [
-      "Chain rule",
-      "Differentiate f(x)=(3x²+1)⁵.",
-      "30x(3x²+1)⁴"
-    ],
-    [
-      "Implicit differentiation",
-      "For x²+y²=25, find dy/dx.",
-      "−x/y"
-    ],
-    [
-      "Exponential derivative",
-      "Differentiate f(x)=e^(4x).",
-      "4e^(4x)"
-    ],
-    [
-      "Logarithmic derivative",
-      "Differentiate f(x)=ln(x²+1).",
-      "2x/(x²+1)"
-    ],
-    [
-      "Trigonometric derivative",
-      "Differentiate f(x)=tan(x).",
-      "sec²(x)"
-    ],
-    [
-      "Second derivative",
-      "Find fʺ(x) for f(x)=x⁴−3x².",
-      "12x²−6"
-    ],
-    [
-      "Limit definition (p. 7)",
-      "Find f′(2) using the limit definition if f(x)=3x²+x.",
-      "13"
-    ],
-    [
-      "Limit definition (p. 7)",
-      "Find f′(3) using the limit definition if f(x)=5x²−4x+1.",
-      "26"
-    ],
-    [
-      "Limit definition (p. 7)",
-      "Find f′(16) using the limit definition if f(x)=5√x.",
-      "5/8"
-    ],
-    [
-      "Tangent slope (p. 7)",
-      "Find f(3) and f′(3) if the tangent line at x=3 is y=5x+4.",
-      "f(3)=19; f′(3)=5"
-    ],
-    [
-      "Power rule (p. 8)",
-      "Differentiate f(x)=4x⁵−3x²+πx−1.",
-      "20x⁴−6x+π"
-    ],
-    [
-      "Trigonometric derivative (p. 8)",
-      "Differentiate f(x)=tan(x)−5ln(x).",
-      "sec²(x)−5/x"
-    ],
-    [
-      "Product rule (p. 8)",
-      "Differentiate f(x)=xeˣ.",
-      "eˣ(x+1)"
-    ],
-    [
-      "Product rule (p. 8)",
-      "Differentiate g(x)=x tan(x).",
-      "tan(x)+x sec²(x)"
-    ],
-    [
-      "Product rule (p. 8)",
-      "Differentiate f(x)=x²ln(x).",
-      "2xln(x)+x"
-    ],
-    [
-      "Chain rule (p. 9)",
-      "Differentiate x(t)=cos(t²).",
-      "−2t sin(t²)"
-    ],
-    [
-      "Chain rule (p. 9)",
-      "Differentiate f(x)=√(16−x²).",
-      "−x/√(16−x²)"
-    ],
-    [
-      "Chain rule (p. 9)",
-      "Differentiate g(x)=arctan(5x²).",
-      "10x/(1+25x⁴)"
-    ],
-    [
-      "Chain rule (p. 9)",
-      "Differentiate h(r)=ln(r²+1).",
-      "2r/(r²+1)"
-    ],
-    [
-      "Chain rule (p. 9)",
-      "Differentiate f(x)=sin(e^(5x)).",
-      "5e^(5x) cos(e^(5x))"
-    ],
-    [
-      "Second derivative (p. 11)",
-      "Find y″ if y=x⁷.",
-      "42x⁵"
-    ],
-    [
-      "Second derivative (p. 11)",
-      "Find y″ if y=x sin(x).",
-      "2cos(x)−x sin(x)"
-    ],
-    [
-      "Implicit differentiation (p. 11)",
-      "Find dy/dx if x⁴+y⁴=2.",
-      "−x³/y³"
-    ],
-    [
-      "Implicit differentiation (p. 11)",
-      "Find dy/dx if xy=x+y.",
-      "(1−y)/(x−1)"
-    ]
-  ],
-  "Applications of Derivatives": [
-    [
-      "Tangent slope",
-      "Find slope of y=x³ at x=2.",
-      "12"
-    ],
-    [
-      "Tangent line",
-      "Find tangent line to y=x² at x=1.",
-      "y=2x−1"
-    ],
-    [
-      "Critical points",
-      "Find critical x-values of f(x)=x³−3x.",
-      "x=−1, 1"
-    ],
-    [
-      "Increasing intervals",
-      "Where is f(x)=x²−4x increasing?",
-      "(2,∞)"
-    ],
-    [
-      "Local extrema",
-      "Find minimum value of f(x)=x²−6x+8.",
-      "−1"
-    ],
-    [
-      "Concavity",
-      "Where is f(x)=x³ concave up?",
-      "(0,∞)"
-    ],
-    [
-      "Inflection points",
-      "Find inflection x-value for f(x)=x³−6x².",
-      "x=2"
-    ],
-    [
-      "Related rates",
-      "Circle radius grows 2 cm/s. Find dA/dt when r=3 cm.",
-      "12π cm²/s"
-    ],
-    [
-      "Optimization",
-      "Find maximum area of a rectangle with perimeter 20.",
-      "25 square units"
-    ],
-    [
-      "Linear approximation",
-      "Approximate √4.1 by linearization at x=4.",
-      "2.025"
-    ],
-    [
-      "Horizontal tangent (p. 10)",
-      "Find x where f(x)=x²−6x+5 has slope 2.",
-      "x=4"
-    ],
-    [
-      "Horizontal tangent (p. 10)",
-      "Find x where f(x)=x³−27x+5 has slope zero.",
-      "x=−3 or x=3"
-    ],
-    [
-      "Horizontal tangent (p. 10)",
-      "Find x where f(x)=5ln(x) has slope 3.",
-      "x=5/3"
-    ],
-    [
-      "Tangent line (p. 11)",
-      "Find tangent line to f(x)=x²−5x+11 at x=2.",
-      "y=−x+7"
-    ],
-    [
-      "Rolle theorem (p. 11)",
-      "Find c guaranteed by Rolle’s theorem for f(x)=x(x−1)² on [0,1].",
-      "c=1/3"
-    ],
-    [
-      "MVT (p. 11)",
-      "Find c guaranteed by MVT for f(x)=x³−2x² on [0,1].",
-      "c=(2+√7)/3"
-    ],
-    [
-      "Motion (p. 13)",
-      "For s(t)=−16t²+32t+48, find velocity and acceleration.",
-      "v(t)=−32t+32; a(t)=−32"
-    ],
-    [
-      "Motion (p. 13)",
-      "For s(t)=−16t²+32t+48, find the maximum height.",
-      "64 feet at t=1 second"
-    ],
-    [
-      "Marginal cost (p. 14)",
-      "For C(x)=500+2x+0.1x², find marginal cost C′(x).",
-      "2+0.2x"
-    ],
-    [
-      "Marginal cost (p. 14)",
-      "For C(x)=500+2x+0.1x², find marginal cost at x=1000.",
-      "$202 per additional widget"
-    ],
-    [
-      "Related rates (p. 14)",
-      "A circle radius decreases at 2 ft/min. Find dA/dt when r=10 ft.",
-      "−40π ft²/min"
-    ],
-    [
-      "Related rates (p. 15)",
-      "A 13-ft ladder foot moves away at 0.5 ft/s. Find top speed when foot is 5 ft away.",
-      "−5/24 ft/s (downward)"
-    ],
-    [
-      "Inverse derivative (p. 17)",
-      "Given f(3)=16 and f′(3)=5, find (f⁻¹)′(16).",
-      "1/5"
-    ],
-    [
-      "Inverse derivative (p. 17)",
-      "Tangent to f at x=2 is y=3x−7. Find (f⁻¹)′(−1).",
-      "1/3"
-    ],
-    [
-      "Newton method (p. 18)",
-      "Write the Newton iteration for solving x³−32=0.",
-      "xₙ₊₁=xₙ−(xₙ³−32)/(3xₙ²)"
-    ]
-  ],
-  "Integrals": [
-    [
-      "Power antiderivative",
-      "Evaluate ∫x⁵ dx.",
-      "x⁶/6+C"
-    ],
-    [
-      "Polynomial antiderivative",
-      "Evaluate ∫(6x²−4x) dx.",
-      "2x³−2x²+C"
-    ],
-    [
-      "Definite integral",
-      "Evaluate ∫₀² x dx.",
-      "2"
-    ],
-    [
-      "u-substitution",
-      "Evaluate ∫2x cos(x²) dx.",
-      "sin(x²)+C"
-    ],
-    [
-      "Trigonometric integral",
-      "Evaluate ∫sin(x) dx.",
-      "−cos(x)+C"
-    ],
-    [
-      "Exponential integral",
-      "Evaluate ∫e^(3x) dx.",
-      "e^(3x)/3+C"
-    ],
-    [
-      "Logarithmic integral",
-      "Evaluate ∫1/x dx (x≠0).",
-      "ln|x|+C"
-    ],
-    [
-      "Integration by parts",
-      "Evaluate ∫x e^x dx.",
-      "e^x(x−1)+C"
-    ],
-    [
-      "Improper integral",
-      "Evaluate ∫₁^∞ 1/x² dx.",
-      "1"
-    ],
-    [
-      "Fundamental theorem",
-      "If F(x)=∫₁ˣ t² dt, find Fʹ(x).",
-      "x²"
-    ],
-    [
-      "Basic antiderivative (p. 18)",
-      "Evaluate ∫(3x⁵−5x⁹+2) dx.",
-      "x⁶/2−x¹⁰/2+2x+C"
-    ],
-    [
-      "Basic antiderivative (p. 18)",
-      "Evaluate ∫(7x⁶−5x³−1) dx.",
-      "x⁷−5x⁴/4−x+C"
-    ],
-    [
-      "Basic antiderivative (p. 18)",
-      "Evaluate ∫(5t+3)² dt.",
-      "(5t+3)³/15+C"
-    ],
-    [
-      "Initial condition (p. 19)",
-      "If F′(x)=x⁵−2x²+1 and F(0)=1, find F(x).",
-      "x⁶/6−2x³/3+x+1"
-    ],
-    [
-      "Initial condition (p. 19)",
-      "If F′(x)=8x³+sin(x) and F(0)=2, find F(x).",
-      "2x⁴−cos(x)+3"
-    ],
-    [
-      "FTC derivative (p. 19)",
-      "Differentiate with respect to x: ∫ from 3 to x of (t²+t+1) dt.",
-      "x²+x+1"
-    ],
-    [
-      "FTC derivative (p. 19)",
-      "Differentiate with respect to x: ∫ from 1 to x of e^(t²) dt.",
-      "e^(x²)"
-    ],
-    [
-      "Definite integral (p. 19)",
-      "Evaluate ∫ from 0 to 2 of 4x³ dx.",
-      "16"
-    ],
-    [
-      "Definite integral (p. 19)",
-      "Evaluate ∫ from 0 to π/4 of cos(x) dx.",
-      "√2/2"
-    ],
-    [
-      "Definite integral (p. 19)",
-      "Evaluate ∫ from 0 to 1 of (x+√x) dx.",
-      "7/6"
-    ],
-    [
-      "Definite integral (p. 19)",
-      "Evaluate ∫ from 0 to ln(8) of eˣ dx.",
-      "7"
-    ],
-    [
-      "Riemann sum (p. 20)",
-      "For f(x)=x+1 on [0,4] with n=4, calculate the left Riemann sum.",
-      "10"
-    ],
-    [
-      "Riemann sum (p. 20)",
-      "For f(x)=x+1 on [0,4] with n=4, calculate the right Riemann sum.",
-      "14"
-    ],
-    [
-      "Riemann sum (p. 20)",
-      "From table x=1,2,3,4,5 with f(x)=0,3,2,0,−3, calculate n=4 left Riemann sum on [1,5].",
-      "5"
-    ]
-  ],
-  "Applications of Integrals": [
-    [
-      "Area under curve",
-      "Find area under y=x² from x=0 to x=2.",
-      "8/3"
-    ],
-    [
-      "Area between curves",
-      "Find area between y=x and y=x² on [0,1].",
-      "1/6"
-    ],
-    [
-      "Disk volume",
-      "Rotate y=x, 0≤x≤2, about x-axis; find volume.",
-      "8π/3"
-    ],
-    [
-      "Washer volume",
-      "Rotate region between y=2 and y=1 on [0,3] about x-axis.",
-      "9π"
-    ],
-    [
-      "Shell volume",
-      "Rotate region under y=x on [0,2] about y-axis.",
-      "16π/3"
-    ],
-    [
-      "Average value",
-      "Find average value of f(x)=x² on [0,3].",
-      "3"
-    ],
-    [
-      "Displacement",
-      "Velocity v(t)=2t; displacement on [0,3]?",
-      "9"
-    ],
-    [
-      "Distance traveled",
-      "Velocity v(t)=t−2; total distance on [0,4]?",
-      "4"
-    ],
-    [
-      "Work",
-      "Force F(x)=3x N; work from x=0 to x=2 m?",
-      "6 J"
-    ],
-    [
-      "Arc length",
-      "Find arc length of y=0 from x=1 to x=5.",
-      "4"
-    ],
-    [
-      "Known integral areas (p. 21)",
-      "Given ∫₀³f(x)dx=2 and ∫₃⁵f(x)dx=−5, find ∫₀⁵5f(x)dx.",
-      "−15"
-    ],
-    [
-      "Known integral areas (p. 21)",
-      "Given ∫₃⁵g(x)dx=1, find ∫₃⁵−3g(x)dx.",
-      "−3"
-    ],
-    [
-      "Known integral areas (p. 21)",
-      "Given ∫₀³f(x)dx=2 and ∫₃⁵f(x)dx=−5, find ∫₀⁵−2f(x)dx.",
-      "6"
-    ],
-    [
-      "Net area (p. 21)",
-      "Find ∫ from −5 to 5 of (25−x²) dx.",
-      "500/3"
-    ],
-    [
-      "Net area (p. 21)",
-      "Find ∫ from 0 to π of sin(x) dx.",
-      "2"
-    ],
-    [
-      "Average value (p. 21)",
-      "Find average value of f(x)=x³ on [−1,2].",
-      "5/4"
-    ],
-    [
-      "Average velocity (p. 21)",
-      "Find average velocity for v(t)=−32t+64 on [0,3].",
-      "16 m/s"
-    ],
-    [
-      "Average velocity (p. 21)",
-      "Find average velocity for v(t)=t²+3t on [0,6].",
-      "21 m/s"
-    ],
-    [
-      "Average velocity (p. 21)",
-      "Find average velocity for v(t)=eᵗ on [−1,1].",
-      "(e−e⁻¹)/2 m/s"
-    ]
-  ],
-  "Techniques of Integration": [
-    [
-      "Substitution",
-      "Evaluate ∫3x²(x³+1)⁴ dx.",
-      "(x³+1)⁵/5+C"
-    ],
-    [
-      "By parts",
-      "Evaluate ∫x cos(x) dx.",
-      "x sin(x)+cos(x)+C"
-    ],
-    [
-      "Trigonometric powers",
-      "Evaluate ∫sin(x)cos(x) dx.",
-      "sin²(x)/2+C"
-    ],
-    [
-      "Trig substitution",
-      "Evaluate ∫1/√(9−x²) dx.",
-      "arcsin(x/3)+C"
-    ],
-    [
-      "Partial fractions",
-      "Evaluate ∫1/[x(x+1)] dx.",
-      "ln|x|−ln|x+1|+C"
-    ],
-    [
-      "Completing square",
-      "Evaluate ∫1/(x²+4) dx.",
-      "(1/2)arctan(x/2)+C"
-    ],
-    [
-      "Reduction identity",
-      "Evaluate ∫sec²(x) dx.",
-      "tan(x)+C"
-    ],
-    [
-      "Improper convergence",
-      "Does ∫₁^∞ 1/x³ dx converge? Give value.",
-      "Yes, 1/2"
-    ],
-    [
-      "Exponential substitution",
-      "Evaluate ∫e^x/(1+e^x) dx.",
-      "ln(1+e^x)+C"
-    ],
-    [
-      "Definite substitution",
-      "Evaluate ∫₀¹ 2x(x²+1) dx.",
-      "3/2"
-    ],
-    [
-      "u-substitution (p. 21)",
-      "Evaluate ∫sin(5x) dx.",
-      "−cos(5x)/5+C"
-    ],
-    [
-      "u-substitution (p. 21)",
-      "Evaluate ∫e^(−3x) dx.",
-      "−e^(−3x)/3+C"
-    ],
-    [
-      "u-substitution (p. 21)",
-      "Evaluate ∫2x(x²−1)⁹⁹ dx.",
-      "(x²−1)¹⁰⁰/100+C"
-    ],
-    [
-      "u-substitution (p. 21)",
-      "Evaluate ∫x e^(−x²) dx.",
-      "−e^(−x²)/2+C"
-    ],
-    [
-      "u-substitution (p. 21)",
-      "Evaluate ∫sin(x)cos(x) dx.",
-      "sin²(x)/2+C"
-    ],
-    [
-      "u-substitution (p. 21)",
-      "Evaluate ∫sec²(10x+7) dx.",
-      "tan(10x+7)/10+C"
-    ],
-    [
-      "u-substitution (p. 21)",
-      "Evaluate ∫x⁹ sin(x¹⁰) dx.",
-      "−cos(x¹⁰)/10+C"
-    ],
-    [
-      "u-substitution (p. 21)",
-      "Evaluate ∫tan(x) dx.",
-      "−ln|cos(x)|+C"
-    ]
-  ],
-  "Sequences & Series": [
-    [
-      "Sequence limit",
-      "Find lim n→∞ of (2n+1)/(n+3).",
-      "2"
-    ],
-    [
-      "Geometric series",
-      "Find sum of 1+1/2+1/4+⋯.",
-      "2"
-    ],
-    [
-      "p-series test",
-      "Does Σ from n=1 to ∞ of 1/n² converge?",
-      "Yes"
-    ],
-    [
-      "Harmonic series",
-      "Does Σ from n=1 to ∞ of 1/n converge?",
-      "No"
-    ],
-    [
-      "Ratio test",
-      "Does Σ n!/nⁿ converge?",
-      "Yes"
-    ],
-    [
-      "Root test",
-      "Does Σ (2/3)ⁿ converge?",
-      "Yes"
-    ],
-    [
-      "Alternating series",
-      "Does Σ (−1)^(n+1)/n converge?",
-      "Yes, conditionally"
-    ],
-    [
-      "Power series radius",
-      "Find radius of convergence of Σ(x/3)ⁿ.",
-      "3"
-    ],
-    [
-      "Taylor polynomial",
-      "Find degree-3 Maclaurin polynomial for e^x.",
-      "1+x+x²/2+x³/6"
-    ],
-    [
-      "Taylor series",
-      "Write Maclaurin series for sin(x).",
-      "Σ (−1)ⁿ x^(2n+1)/(2n+1)!"
-    ]
-  ],
-  "Parametric & Polar": [
-    [
-      "Parametric slope",
-      "If x=t² and y=t³, find dy/dx.",
-      "3t/2 (t≠0)"
-    ],
-    [
-      "Parametric second derivative",
-      "For x=t, y=t², find d²y/dx².",
-      "2"
-    ],
-    [
-      "Eliminate parameter",
-      "For x=t+1, y=2t, eliminate t.",
-      "y=2x−2"
-    ],
-    [
-      "Polar to Cartesian",
-      "Convert r=2, θ=π/3 to (x,y).",
-      "(1,√3)"
-    ],
-    [
-      "Cartesian to polar",
-      "Convert (−1,0) to polar (r,θ), r≥0.",
-      "(1,π)"
-    ],
-    [
-      "Polar curve",
-      "Identify curve r=4.",
-      "Circle of radius 4 centered at origin"
-    ],
-    [
-      "Polar area",
-      "Find area enclosed by r=2.",
-      "4π"
-    ],
-    [
-      "Polar slope",
-      "Find dy/dx for r=2θ at θ=π/2.",
-      "−π/2"
-    ],
-    [
-      "Parametric speed",
-      "For x=3t, y=4t, find speed.",
-      "5"
-    ],
-    [
-      "Parametric arc length",
-      "For x=t, y=0, t from 0 to 5, find length.",
-      "5"
-    ]
-  ],
-  "Differential Equations": [
-    [
-      "Separable equation",
-      "Solve dy/dx=2x with y(0)=1.",
-      "y=x²+1"
-    ],
-    [
-      "Exponential growth",
-      "Solve dy/dt=3y, y(0)=2.",
-      "y=2e^(3t)"
-    ],
-    [
-      "Exponential decay",
-      "Solve dy/dt=−2y, y(0)=5.",
-      "y=5e^(−2t)"
-    ],
-    [
-      "Equilibrium",
-      "Find equilibrium of dy/dt=y(4−y).",
-      "y=0, 4"
-    ],
-    [
-      "Linear first order",
-      "Solve yʹ+y=0 with y(0)=3.",
-      "y=3e^(−x)"
-    ],
-    [
-      "Initial value",
-      "Solve yʹ=cos(x), y(0)=0.",
-      "y=sin(x)"
-    ],
-    [
-      "Second order",
-      "Solve yʺ=0.",
-      "y=C₁x+C₂"
-    ],
-    [
-      "Characteristic equation",
-      "Solve yʺ−y=0.",
-      "y=C₁e^x+C₂e^(−x)"
-    ],
-    [
-      "Slope field",
-      "For yʹ=x+y, find slope at (1,2).",
-      "3"
-    ],
-    [
-      "Logistic model",
-      "For yʹ=0.2y(1−y/100), identify carrying capacity.",
-      "100"
-    ]
-  ],
-  "Multivariable Calculus": [
-    [
-      "Partial derivative x",
-      "Find ∂f/∂x for f=x²y+3y.",
-      "2xy"
-    ],
-    [
-      "Partial derivative y",
-      "Find ∂f/∂y for f=x²y+3y.",
-      "x²+3"
-    ],
-    [
-      "Gradient",
-      "Find ∇f for f=x²+y².",
-      "(2x,2y)"
-    ],
-    [
-      "Directional derivative",
-      "For f=x+y at (0,0), along unit vector (1,0), find derivative.",
-      "1"
-    ],
-    [
-      "Tangent plane",
-      "Find tangent plane to z=x²+y² at (1,1,2).",
-      "z=2x+2y−2"
-    ],
-    [
-      "Double integral",
-      "Evaluate ∫₀¹∫₀² xy dy dx.",
-      "1"
-    ],
-    [
-      "Triple integral",
-      "Evaluate ∫₀¹∫₀¹∫₀¹ 1 dz dy dx.",
-      "1"
-    ],
-    [
-      "Critical points",
-      "Find critical point of f=x²+y².",
-      "(0,0)"
-    ],
-    [
-      "Lagrange multipliers",
-      "Maximize xy subject to x+y=10, x,y≥0.",
-      "25 at (5,5)"
-    ],
-    [
-      "Divergence",
-      "Find divergence of F=(x²,y²,z²).",
-      "2x+2y+2z"
-    ]
-  ]
-};
+                    <h2>
+                        Answer Key
+                    </h2>
+                </div>
+                <button class="primary compact" id="keyprint" type="button">
+                    Print Answer Key
+                </button>
+            </div>
+            <div class="placeholder" id="answer-output">
+                Generate a test to view the answer key.
+            </div>
+        </div>
+    </section>
+</main>
+<footer>
+    Calculus Test Generator • Spring Boot Learning Application
+</footer>
+<script>
+    window.CALCULUS_BANK = {
+        "Limits & Continuity": [
+            [
+                "Direct substitution",
+                "Evaluate lim as x→2 of (x² + 3x).",
+                "10"
+            ],
+            [
+                "Factor and cancel",
+                "Evaluate lim as x→3 of (x² − 9)/(x − 3).",
+                "6"
+            ],
+            [
+                "Rationalization",
+                "Evaluate lim as x→0 of (√(x+4) − 2)/x.",
+                "1/4"
+            ],
+            [
+                "Trigonometric limit",
+                "Evaluate lim as x→0 of sin(5x)/x.",
+                "5"
+            ],
+            [
+                "One-sided limit",
+                "Evaluate lim as x→0⁺ of |x|/x.",
+                "1"
+            ],
+            [
+                "Infinite limit",
+                "Evaluate lim as x→2⁺ of 1/(x−2).",
+                "+∞"
+            ],
+            [
+                "At infinity",
+                "Evaluate lim as x→∞ of (3x²+2)/(x²−1).",
+                "3"
+            ],
+            [
+                "Continuity parameter",
+                "Find k so f(x) = (x²−4)/(x−2) for x≠2 and f(2)=k is continuous.",
+                "4"
+            ],
+            [
+                "Squeeze theorem",
+                "Evaluate lim as x→0 of x² sin(1/x).",
+                "0"
+            ],
+            [
+                "Exponential limit",
+                "Evaluate lim as x→0 of (e^(3x)−1)/x.",
+                "3"
+            ],
+            [
+                "Limit table (p. 2)",
+                "Estimate lim f(x) as x→3 given f(2.9)=−5.6, f(2.99)=−4.16, f(2.999)=−4.016.",
+                "−4"
+            ],
+            [
+                "Limit table (p. 2)",
+                "Estimate lim f(x) as x→−5 given f(−5.1)=3.9, f(−5.01)=2.45, f(−5.001)=2.045.",
+                "2"
+            ],
+            [
+                "Direct limit (p. 4)",
+                "Evaluate lim x→4 of (−2x+5).",
+                "−3"
+            ],
+            [
+                "Polynomial limit (p. 4)",
+                "Evaluate lim t→−2 of (t³−2t+5).",
+                "1"
+            ],
+            [
+                "Factoring limit (p. 4)",
+                "Evaluate lim x→1 of (x²−1)/(x−1).",
+                "2"
+            ],
+            [
+                "Factoring limit (p. 4)",
+                "Evaluate lim x→4 of (x²−16)/(4−x).",
+                "−8"
+            ],
+            [
+                "Factoring limit (p. 4)",
+                "Evaluate lim t→2 of (3t²−7t+2)/(t−2).",
+                "5"
+            ],
+            [
+                "Conjugate limit (p. 4)",
+                "Evaluate lim x→9 of (√x−3)/(x−9).",
+                "1/6"
+            ],
+            [
+                "Difference quotient (p. 4)",
+                "Evaluate lim h→0 of ((5+h)²−25)/h.",
+                "10"
+            ],
+            [
+                "Infinite limit (p. 5)",
+                "Evaluate lim x→3 of 1/(x−3)².",
+                "+∞"
+            ],
+            [
+                "Infinity limit (p. 5)",
+                "Evaluate lim x→−∞ of (4x²+3x−5)/(x²+1).",
+                "4"
+            ],
+            [
+                "Infinity limit (p. 5)",
+                "Evaluate lim x→∞ of (6x²−9x+8)/(3x²+2).",
+                "2"
+            ],
+            [
+                "Infinity limit (p. 5)",
+                "Evaluate lim x→∞ of (6x²−9x+8)/(3x³+2).",
+                "0"
+            ],
+            [
+                "Sine limit (p. 5)",
+                "Evaluate lim x→0 of sin(3x)/x.",
+                "3"
+            ],
+            [
+                "Sine limit (p. 5)",
+                "Evaluate lim x→0 of sin(5x)/tan(2x).",
+                "5/2"
+            ],
+            [
+                "Piecewise continuity (p. 6)",
+                "For f(x)=(x²−1)/(x−1) if x≠1 and f(1)=3, is f continuous at 1?",
+                "No; limit is 2 but f(1)=3."
+            ],
+            [
+                "IVT (p. 6)",
+                "Show that 2x³+x−2=0 has a root on [−1,1].",
+                "f(−1)=−5 and f(1)=1; by IVT a root exists."
+            ]
+        ],
+        "Derivatives": [
+            [
+                "Power rule",
+                "Differentiate f(x)=x⁷.",
+                "7x⁶"
+            ],
+            [
+                "Polynomial rule",
+                "Differentiate f(x)=4x³−5x+2.",
+                "12x²−5"
+            ],
+            [
+                "Product rule",
+                "Differentiate f(x)=x² sin(x).",
+                "2x sin(x)+x² cos(x)"
+            ],
+            [
+                "Quotient rule",
+                "Differentiate f(x)=x/(x+1).",
+                "1/(x+1)²"
+            ],
+            [
+                "Chain rule",
+                "Differentiate f(x)=(3x²+1)⁵.",
+                "30x(3x²+1)⁴"
+            ],
+            [
+                "Implicit differentiation",
+                "For x²+y²=25, find dy/dx.",
+                "−x/y"
+            ],
+            [
+                "Exponential derivative",
+                "Differentiate f(x)=e^(4x).",
+                "4e^(4x)"
+            ],
+            [
+                "Logarithmic derivative",
+                "Differentiate f(x)=ln(x²+1).",
+                "2x/(x²+1)"
+            ],
+            [
+                "Trigonometric derivative",
+                "Differentiate f(x)=tan(x).",
+                "sec²(x)"
+            ],
+            [
+                "Second derivative",
+                "Find fʺ(x) for f(x)=x⁴−3x².",
+                "12x²−6"
+            ],
+            [
+                "Limit definition (p. 7)",
+                "Find f′(2) using the limit definition if f(x)=3x²+x.",
+                "13"
+            ],
+            [
+                "Limit definition (p. 7)",
+                "Find f′(3) using the limit definition if f(x)=5x²−4x+1.",
+                "26"
+            ],
+            [
+                "Limit definition (p. 7)",
+                "Find f′(16) using the limit definition if f(x)=5√x.",
+                "5/8"
+            ],
+            [
+                "Tangent slope (p. 7)",
+                "Find f(3) and f′(3) if the tangent line at x=3 is y=5x+4.",
+                "f(3)=19; f′(3)=5"
+            ],
+            [
+                "Power rule (p. 8)",
+                "Differentiate f(x)=4x⁵−3x²+πx−1.",
+                "20x⁴−6x+π"
+            ],
+            [
+                "Trigonometric derivative (p. 8)",
+                "Differentiate f(x)=tan(x)−5ln(x).",
+                "sec²(x)−5/x"
+            ],
+            [
+                "Product rule (p. 8)",
+                "Differentiate f(x)=xeˣ.",
+                "eˣ(x+1)"
+            ],
+            [
+                "Product rule (p. 8)",
+                "Differentiate g(x)=x tan(x).",
+                "tan(x)+x sec²(x)"
+            ],
+            [
+                "Product rule (p. 8)",
+                "Differentiate f(x)=x²ln(x).",
+                "2xln(x)+x"
+            ],
+            [
+                "Chain rule (p. 9)",
+                "Differentiate x(t)=cos(t²).",
+                "−2t sin(t²)"
+            ],
+            [
+                "Chain rule (p. 9)",
+                "Differentiate f(x)=√(16−x²).",
+                "−x/√(16−x²)"
+            ],
+            [
+                "Chain rule (p. 9)",
+                "Differentiate g(x)=arctan(5x²).",
+                "10x/(1+25x⁴)"
+            ],
+            [
+                "Chain rule (p. 9)",
+                "Differentiate h(r)=ln(r²+1).",
+                "2r/(r²+1)"
+            ],
+            [
+                "Chain rule (p. 9)",
+                "Differentiate f(x)=sin(e^(5x)).",
+                "5e^(5x) cos(e^(5x))"
+            ],
+            [
+                "Second derivative (p. 11)",
+                "Find y″ if y=x⁷.",
+                "42x⁵"
+            ],
+            [
+                "Second derivative (p. 11)",
+                "Find y″ if y=x sin(x).",
+                "2cos(x)−x sin(x)"
+            ],
+            [
+                "Implicit differentiation (p. 11)",
+                "Find dy/dx if x⁴+y⁴=2.",
+                "−x³/y³"
+            ],
+            [
+                "Implicit differentiation (p. 11)",
+                "Find dy/dx if xy=x+y.",
+                "(1−y)/(x−1)"
+            ]
+        ],
+        "Applications of Derivatives": [
+            [
+                "Tangent slope",
+                "Find slope of y=x³ at x=2.",
+                "12"
+            ],
+            [
+                "Tangent line",
+                "Find tangent line to y=x² at x=1.",
+                "y=2x−1"
+            ],
+            [
+                "Critical points",
+                "Find critical x-values of f(x)=x³−3x.",
+                "x=−1, 1"
+            ],
+            [
+                "Increasing intervals",
+                "Where is f(x)=x²−4x increasing?",
+                "(2,∞)"
+            ],
+            [
+                "Local extrema",
+                "Find minimum value of f(x)=x²−6x+8.",
+                "−1"
+            ],
+            [
+                "Concavity",
+                "Where is f(x)=x³ concave up?",
+                "(0,∞)"
+            ],
+            [
+                "Inflection points",
+                "Find inflection x-value for f(x)=x³−6x².",
+                "x=2"
+            ],
+            [
+                "Related rates",
+                "Circle radius grows 2 cm/s. Find dA/dt when r=3 cm.",
+                "12π cm²/s"
+            ],
+            [
+                "Optimization",
+                "Find maximum area of a rectangle with perimeter 20.",
+                "25 square units"
+            ],
+            [
+                "Linear approximation",
+                "Approximate √4.1 by linearization at x=4.",
+                "2.025"
+            ],
+            [
+                "Horizontal tangent (p. 10)",
+                "Find x where f(x)=x²−6x+5 has slope 2.",
+                "x=4"
+            ],
+            [
+                "Horizontal tangent (p. 10)",
+                "Find x where f(x)=x³−27x+5 has slope zero.",
+                "x=−3 or x=3"
+            ],
+            [
+                "Horizontal tangent (p. 10)",
+                "Find x where f(x)=5ln(x) has slope 3.",
+                "x=5/3"
+            ],
+            [
+                "Tangent line (p. 11)",
+                "Find tangent line to f(x)=x²−5x+11 at x=2.",
+                "y=−x+7"
+            ],
+            [
+                "Rolle theorem (p. 11)",
+                "Find c guaranteed by Rolle’s theorem for f(x)=x(x−1)² on [0,1].",
+                "c=1/3"
+            ],
+            [
+                "MVT (p. 11)",
+                "Find c guaranteed by MVT for f(x)=x³−2x² on [0,1].",
+                "c=(2+√7)/3"
+            ],
+            [
+                "Motion (p. 13)",
+                "For s(t)=−16t²+32t+48, find velocity and acceleration.",
+                "v(t)=−32t+32; a(t)=−32"
+            ],
+            [
+                "Motion (p. 13)",
+                "For s(t)=−16t²+32t+48, find the maximum height.",
+                "64 feet at t=1 second"
+            ],
+            [
+                "Marginal cost (p. 14)",
+                "For C(x)=500+2x+0.1x², find marginal cost C′(x).",
+                "2+0.2x"
+            ],
+            [
+                "Marginal cost (p. 14)",
+                "For C(x)=500+2x+0.1x², find marginal cost at x=1000.",
+                "$202 per additional widget"
+            ],
+            [
+                "Related rates (p. 14)",
+                "A circle radius decreases at 2 ft/min. Find dA/dt when r=10 ft.",
+                "−40π ft²/min"
+            ],
+            [
+                "Related rates (p. 15)",
+                "A 13-ft ladder foot moves away at 0.5 ft/s. Find top speed when foot is 5 ft away.",
+                "−5/24 ft/s (downward)"
+            ],
+            [
+                "Inverse derivative (p. 17)",
+                "Given f(3)=16 and f′(3)=5, find (f⁻¹)′(16).",
+                "1/5"
+            ],
+            [
+                "Inverse derivative (p. 17)",
+                "Tangent to f at x=2 is y=3x−7. Find (f⁻¹)′(−1).",
+                "1/3"
+            ],
+            [
+                "Newton method (p. 18)",
+                "Write the Newton iteration for solving x³−32=0.",
+                "xₙ₊₁=xₙ−(xₙ³−32)/(3xₙ²)"
+            ]
+        ],
+        "Integrals": [
+            [
+                "Power antiderivative",
+                "Evaluate ∫x⁵ dx.",
+                "x⁶/6+C"
+            ],
+            [
+                "Polynomial antiderivative",
+                "Evaluate ∫(6x²−4x) dx.",
+                "2x³−2x²+C"
+            ],
+            [
+                "Definite integral",
+                "Evaluate ∫₀² x dx.",
+                "2"
+            ],
+            [
+                "u-substitution",
+                "Evaluate ∫2x cos(x²) dx.",
+                "sin(x²)+C"
+            ],
+            [
+                "Trigonometric integral",
+                "Evaluate ∫sin(x) dx.",
+                "−cos(x)+C"
+            ],
+            [
+                "Exponential integral",
+                "Evaluate ∫e^(3x) dx.",
+                "e^(3x)/3+C"
+            ],
+            [
+                "Logarithmic integral",
+                "Evaluate ∫1/x dx (x≠0).",
+                "ln|x|+C"
+            ],
+            [
+                "Integration by parts",
+                "Evaluate ∫x e^x dx.",
+                "e^x(x−1)+C"
+            ],
+            [
+                "Improper integral",
+                "Evaluate ∫₁^∞ 1/x² dx.",
+                "1"
+            ],
+            [
+                "Fundamental theorem",
+                "If F(x)=∫₁ˣ t² dt, find Fʹ(x).",
+                "x²"
+            ],
+            [
+                "Basic antiderivative (p. 18)",
+                "Evaluate ∫(3x⁵−5x⁹+2) dx.",
+                "x⁶/2−x¹⁰/2+2x+C"
+            ],
+            [
+                "Basic antiderivative (p. 18)",
+                "Evaluate ∫(7x⁶−5x³−1) dx.",
+                "x⁷−5x⁴/4−x+C"
+            ],
+            [
+                "Basic antiderivative (p. 18)",
+                "Evaluate ∫(5t+3)² dt.",
+                "(5t+3)³/15+C"
+            ],
+            [
+                "Initial condition (p. 19)",
+                "If F′(x)=x⁵−2x²+1 and F(0)=1, find F(x).",
+                "x⁶/6−2x³/3+x+1"
+            ],
+            [
+                "Initial condition (p. 19)",
+                "If F′(x)=8x³+sin(x) and F(0)=2, find F(x).",
+                "2x⁴−cos(x)+3"
+            ],
+            [
+                "FTC derivative (p. 19)",
+                "Differentiate with respect to x: ∫ from 3 to x of (t²+t+1) dt.",
+                "x²+x+1"
+            ],
+            [
+                "FTC derivative (p. 19)",
+                "Differentiate with respect to x: ∫ from 1 to x of e^(t²) dt.",
+                "e^(x²)"
+            ],
+            [
+                "Definite integral (p. 19)",
+                "Evaluate ∫ from 0 to 2 of 4x³ dx.",
+                "16"
+            ],
+            [
+                "Definite integral (p. 19)",
+                "Evaluate ∫ from 0 to π/4 of cos(x) dx.",
+                "√2/2"
+            ],
+            [
+                "Definite integral (p. 19)",
+                "Evaluate ∫ from 0 to 1 of (x+√x) dx.",
+                "7/6"
+            ],
+            [
+                "Definite integral (p. 19)",
+                "Evaluate ∫ from 0 to ln(8) of eˣ dx.",
+                "7"
+            ],
+            [
+                "Riemann sum (p. 20)",
+                "For f(x)=x+1 on [0,4] with n=4, calculate the left Riemann sum.",
+                "10"
+            ],
+            [
+                "Riemann sum (p. 20)",
+                "For f(x)=x+1 on [0,4] with n=4, calculate the right Riemann sum.",
+                "14"
+            ],
+            [
+                "Riemann sum (p. 20)",
+                "From table x=1,2,3,4,5 with f(x)=0,3,2,0,−3, calculate n=4 left Riemann sum on [1,5].",
+                "5"
+            ]
+        ],
+        "Applications of Integrals": [
+            [
+                "Area under curve",
+                "Find area under y=x² from x=0 to x=2.",
+                "8/3"
+            ],
+            [
+                "Area between curves",
+                "Find area between y=x and y=x² on [0,1].",
+                "1/6"
+            ],
+            [
+                "Disk volume",
+                "Rotate y=x, 0≤x≤2, about x-axis; find volume.",
+                "8π/3"
+            ],
+            [
+                "Washer volume",
+                "Rotate region between y=2 and y=1 on [0,3] about x-axis.",
+                "9π"
+            ],
+            [
+                "Shell volume",
+                "Rotate region under y=x on [0,2] about y-axis.",
+                "16π/3"
+            ],
+            [
+                "Average value",
+                "Find average value of f(x)=x² on [0,3].",
+                "3"
+            ],
+            [
+                "Displacement",
+                "Velocity v(t)=2t; displacement on [0,3]?",
+                "9"
+            ],
+            [
+                "Distance traveled",
+                "Velocity v(t)=t−2; total distance on [0,4]?",
+                "4"
+            ],
+            [
+                "Work",
+                "Force F(x)=3x N; work from x=0 to x=2 m?",
+                "6 J"
+            ],
+            [
+                "Arc length",
+                "Find arc length of y=0 from x=1 to x=5.",
+                "4"
+            ],
+            [
+                "Known integral areas (p. 21)",
+                "Given ∫₀³f(x)dx=2 and ∫₃⁵f(x)dx=−5, find ∫₀⁵5f(x)dx.",
+                "−15"
+            ],
+            [
+                "Known integral areas (p. 21)",
+                "Given ∫₃⁵g(x)dx=1, find ∫₃⁵−3g(x)dx.",
+                "−3"
+            ],
+            [
+                "Known integral areas (p. 21)",
+                "Given ∫₀³f(x)dx=2 and ∫₃⁵f(x)dx=−5, find ∫₀⁵−2f(x)dx.",
+                "6"
+            ],
+            [
+                "Net area (p. 21)",
+                "Find ∫ from −5 to 5 of (25−x²) dx.",
+                "500/3"
+            ],
+            [
+                "Net area (p. 21)",
+                "Find ∫ from 0 to π of sin(x) dx.",
+                "2"
+            ],
+            [
+                "Average value (p. 21)",
+                "Find average value of f(x)=x³ on [−1,2].",
+                "5/4"
+            ],
+            [
+                "Average velocity (p. 21)",
+                "Find average velocity for v(t)=−32t+64 on [0,3].",
+                "16 m/s"
+            ],
+            [
+                "Average velocity (p. 21)",
+                "Find average velocity for v(t)=t²+3t on [0,6].",
+                "21 m/s"
+            ],
+            [
+                "Average velocity (p. 21)",
+                "Find average velocity for v(t)=eᵗ on [−1,1].",
+                "(e−e⁻¹)/2 m/s"
+            ]
+        ],
+        "Techniques of Integration": [
+            [
+                "Substitution",
+                "Evaluate ∫3x²(x³+1)⁴ dx.",
+                "(x³+1)⁵/5+C"
+            ],
+            [
+                "By parts",
+                "Evaluate ∫x cos(x) dx.",
+                "x sin(x)+cos(x)+C"
+            ],
+            [
+                "Trigonometric powers",
+                "Evaluate ∫sin(x)cos(x) dx.",
+                "sin²(x)/2+C"
+            ],
+            [
+                "Trig substitution",
+                "Evaluate ∫1/√(9−x²) dx.",
+                "arcsin(x/3)+C"
+            ],
+            [
+                "Partial fractions",
+                "Evaluate ∫1/[x(x+1)] dx.",
+                "ln|x|−ln|x+1|+C"
+            ],
+            [
+                "Completing square",
+                "Evaluate ∫1/(x²+4) dx.",
+                "(1/2)arctan(x/2)+C"
+            ],
+            [
+                "Reduction identity",
+                "Evaluate ∫sec²(x) dx.",
+                "tan(x)+C"
+            ],
+            [
+                "Improper convergence",
+                "Does ∫₁^∞ 1/x³ dx converge? Give value.",
+                "Yes, 1/2"
+            ],
+            [
+                "Exponential substitution",
+                "Evaluate ∫e^x/(1+e^x) dx.",
+                "ln(1+e^x)+C"
+            ],
+            [
+                "Definite substitution",
+                "Evaluate ∫₀¹ 2x(x²+1) dx.",
+                "3/2"
+            ],
+            [
+                "u-substitution (p. 21)",
+                "Evaluate ∫sin(5x) dx.",
+                "−cos(5x)/5+C"
+            ],
+            [
+                "u-substitution (p. 21)",
+                "Evaluate ∫e^(−3x) dx.",
+                "−e^(−3x)/3+C"
+            ],
+            [
+                "u-substitution (p. 21)",
+                "Evaluate ∫2x(x²−1)⁹⁹ dx.",
+                "(x²−1)¹⁰⁰/100+C"
+            ],
+            [
+                "u-substitution (p. 21)",
+                "Evaluate ∫x e^(−x²) dx.",
+                "−e^(−x²)/2+C"
+            ],
+            [
+                "u-substitution (p. 21)",
+                "Evaluate ∫sin(x)cos(x) dx.",
+                "sin²(x)/2+C"
+            ],
+            [
+                "u-substitution (p. 21)",
+                "Evaluate ∫sec²(10x+7) dx.",
+                "tan(10x+7)/10+C"
+            ],
+            [
+                "u-substitution (p. 21)",
+                "Evaluate ∫x⁹ sin(x¹⁰) dx.",
+                "−cos(x¹⁰)/10+C"
+            ],
+            [
+                "u-substitution (p. 21)",
+                "Evaluate ∫tan(x) dx.",
+                "−ln|cos(x)|+C"
+            ]
+        ],
+        "Sequences & Series": [
+            [
+                "Sequence limit",
+                "Find lim n→∞ of (2n+1)/(n+3).",
+                "2"
+            ],
+            [
+                "Geometric series",
+                "Find sum of 1+1/2+1/4+⋯.",
+                "2"
+            ],
+            [
+                "p-series test",
+                "Does Σ from n=1 to ∞ of 1/n² converge?",
+                "Yes"
+            ],
+            [
+                "Harmonic series",
+                "Does Σ from n=1 to ∞ of 1/n converge?",
+                "No"
+            ],
+            [
+                "Ratio test",
+                "Does Σ n!/nⁿ converge?",
+                "Yes"
+            ],
+            [
+                "Root test",
+                "Does Σ (2/3)ⁿ converge?",
+                "Yes"
+            ],
+            [
+                "Alternating series",
+                "Does Σ (−1)^(n+1)/n converge?",
+                "Yes, conditionally"
+            ],
+            [
+                "Power series radius",
+                "Find radius of convergence of Σ(x/3)ⁿ.",
+                "3"
+            ],
+            [
+                "Taylor polynomial",
+                "Find degree-3 Maclaurin polynomial for e^x.",
+                "1+x+x²/2+x³/6"
+            ],
+            [
+                "Taylor series",
+                "Write Maclaurin series for sin(x).",
+                "Σ (−1)ⁿ x^(2n+1)/(2n+1)!"
+            ]
+        ],
+        "Parametric & Polar": [
+            [
+                "Parametric slope",
+                "If x=t² and y=t³, find dy/dx.",
+                "3t/2 (t≠0)"
+            ],
+            [
+                "Parametric second derivative",
+                "For x=t, y=t², find d²y/dx².",
+                "2"
+            ],
+            [
+                "Eliminate parameter",
+                "For x=t+1, y=2t, eliminate t.",
+                "y=2x−2"
+            ],
+            [
+                "Polar to Cartesian",
+                "Convert r=2, θ=π/3 to (x,y).",
+                "(1,√3)"
+            ],
+            [
+                "Cartesian to polar",
+                "Convert (−1,0) to polar (r,θ), r≥0.",
+                "(1,π)"
+            ],
+            [
+                "Polar curve",
+                "Identify curve r=4.",
+                "Circle of radius 4 centered at origin"
+            ],
+            [
+                "Polar area",
+                "Find area enclosed by r=2.",
+                "4π"
+            ],
+            [
+                "Polar slope",
+                "Find dy/dx for r=2θ at θ=π/2.",
+                "−π/2"
+            ],
+            [
+                "Parametric speed",
+                "For x=3t, y=4t, find speed.",
+                "5"
+            ],
+            [
+                "Parametric arc length",
+                "For x=t, y=0, t from 0 to 5, find length.",
+                "5"
+            ]
+        ],
+        "Differential Equations": [
+            [
+                "Separable equation",
+                "Solve dy/dx=2x with y(0)=1.",
+                "y=x²+1"
+            ],
+            [
+                "Exponential growth",
+                "Solve dy/dt=3y, y(0)=2.",
+                "y=2e^(3t)"
+            ],
+            [
+                "Exponential decay",
+                "Solve dy/dt=−2y, y(0)=5.",
+                "y=5e^(−2t)"
+            ],
+            [
+                "Equilibrium",
+                "Find equilibrium of dy/dt=y(4−y).",
+                "y=0, 4"
+            ],
+            [
+                "Linear first order",
+                "Solve yʹ+y=0 with y(0)=3.",
+                "y=3e^(−x)"
+            ],
+            [
+                "Initial value",
+                "Solve yʹ=cos(x), y(0)=0.",
+                "y=sin(x)"
+            ],
+            [
+                "Second order",
+                "Solve yʺ=0.",
+                "y=C₁x+C₂"
+            ],
+            [
+                "Characteristic equation",
+                "Solve yʺ−y=0.",
+                "y=C₁e^x+C₂e^(−x)"
+            ],
+            [
+                "Slope field",
+                "For yʹ=x+y, find slope at (1,2).",
+                "3"
+            ],
+            [
+                "Logistic model",
+                "For yʹ=0.2y(1−y/100), identify carrying capacity.",
+                "100"
+            ]
+        ],
+        "Multivariable Calculus": [
+            [
+                "Partial derivative x",
+                "Find ∂f/∂x for f=x²y+3y.",
+                "2xy"
+            ],
+            [
+                "Partial derivative y",
+                "Find ∂f/∂y for f=x²y+3y.",
+                "x²+3"
+            ],
+            [
+                "Gradient",
+                "Find ∇f for f=x²+y².",
+                "(2x,2y)"
+            ],
+            [
+                "Directional derivative",
+                "For f=x+y at (0,0), along unit vector (1,0), find derivative.",
+                "1"
+            ],
+            [
+                "Tangent plane",
+                "Find tangent plane to z=x²+y² at (1,1,2).",
+                "z=2x+2y−2"
+            ],
+            [
+                "Double integral",
+                "Evaluate ∫₀¹∫₀² xy dy dx.",
+                "1"
+            ],
+            [
+                "Triple integral",
+                "Evaluate ∫₀¹∫₀¹∫₀¹ 1 dz dy dx.",
+                "1"
+            ],
+            [
+                "Critical points",
+                "Find critical point of f=x²+y².",
+                "(0,0)"
+            ],
+            [
+                "Lagrange multipliers",
+                "Maximize xy subject to x+y=10, x,y≥0.",
+                "25 at (5,5)"
+            ],
+            [
+                "Divergence",
+                "Find divergence of F=(x²,y²,z²).",
+                "2x+2y+2z"
+            ]
+        ]
+    };
 
 </script>
-  <script>
-'use strict';
+<script>
+    'use strict';
 
-const bank=window.CALCULUS_BANK||{};
+    const bank=window.CALCULUS_BANK||{};
 
-const $=id=>document.getElementById(id);
+    const $=id=>document.getElementById(id);
 
-const names=Object.keys(bank);
+    const names=Object.keys(bank);
 
-// Each generation creates fresh numerical variations, with answers computed
-// from the same parameters. The original and PDF exercises remain in the bank.
-function numericalVariants(topic) {
-  const variants = [];
-  const rand = (lo, hi) => lo + Math.floor(Math.random() * (hi - lo + 1));
-  const signed = n => n < 0 ? `− ${Math.abs(n)}` : `+ ${n}`;
-  for (let i = 0; i < 25; i++) {
-    const a = rand(2, 12), b = rand(1, 9), c = rand(1, 8);
-    if (topic === 'Limits & Continuity') {
-      variants.push({topic, type:'Generated polynomial limit',
-        q:`Evaluate lim x→${c} of (${a}x² ${signed(b)}x).`,
-        a:String(a*c*c+b*c)});
-      variants.push({topic, type:'Generated factoring limit',
-        q:`Evaluate lim x→${c} of (x² − ${c*c})/(x − ${c}).`,
-        a:String(2*c)});
-    } else if (topic === 'Derivatives') {
-      variants.push({topic, type:'Generated power rule',
-        q:`Differentiate f(x)=${a}x³ + ${b}x² − ${c}x.`,
-        a:`${3*a}x² + ${2*b}x − ${c}`});
-      variants.push({topic, type:'Generated derivative at a point',
-        q:`Find f′(${c}) for f(x)=${a}x² + ${b}x.`,
-        a:String(2*a*c+b)});
-    } else if (topic === 'Integrals') {
-      variants.push({topic, type:'Generated indefinite integral',
-        q:`Evaluate ∫(${a}x² + ${2*b}x + ${c}) dx.`,
-        a:`${a}/3 x³ + ${b}x² + ${c}x + C`});
-      variants.push({topic, type:'Generated definite integral',
-        q:`Evaluate ∫ from 0 to ${c} of ${a}x dx.`,
-        a:String(a*c*c/2)});
-    } else if (topic === 'Applications of Derivatives') {
-      variants.push({topic, type:'Generated marginal cost',
-        q:`If C(x)=${a}x²+${b}x+${c}, find C′(${c}).`,
-        a:String(2*a*c+b)});
-    } else if (topic === 'Techniques of Integration') {
-      variants.push({topic, type:'Generated substitution',
-        q:`Evaluate ∫${a}x(${a}x²+${b})⁴ dx.`,
-        a:`(${a}x²+${b})⁵/10 + C`});
-    } else if (topic === 'Applications of Integrals') {
-      variants.push({topic, type:'Generated average value',
-        q:`Find average value of f(x)=${a}x+${b} on [0, ${c}].`,
-        a:String(a*c/2+b)});
+    // Each generation creates fresh numerical variations, with answers computed
+    // from the same parameters. The original and PDF exercises remain in the bank.
+    function numericalVariants(topic) {
+        const variants = [];
+        const rand = (lo, hi) => lo + Math.floor(Math.random() * (hi - lo + 1));
+        const signed = n => n < 0 ? `− ${Math.abs(n)}` : `+ ${n}`;
+        for (let i = 0; i < 25; i++) {
+            const a = rand(2, 12), b = rand(1, 9), c = rand(1, 8);
+            if (topic === 'Limits & Continuity') {
+                variants.push({topic, type:'Generated polynomial limit',
+                    q:`Evaluate lim x→${c} of (${a}x² ${signed(b)}x).`,
+                    a:String(a*c*c+b*c)});
+                variants.push({topic, type:'Generated factoring limit',
+                    q:`Evaluate lim x→${c} of (x² − ${c*c})/(x − ${c}).`,
+                    a:String(2*c)});
+            } else if (topic === 'Derivatives') {
+                variants.push({topic, type:'Generated power rule',
+                    q:`Differentiate f(x)=${a}x³ + ${b}x² − ${c}x.`,
+                    a:`${3*a}x² + ${2*b}x − ${c}`});
+                variants.push({topic, type:'Generated derivative at a point',
+                    q:`Find f′(${c}) for f(x)=${a}x² + ${b}x.`,
+                    a:String(2*a*c+b)});
+            } else if (topic === 'Integrals') {
+                variants.push({topic, type:'Generated indefinite integral',
+                    q:`Evaluate ∫(${a}x² + ${2*b}x + ${c}) dx.`,
+                    a:`${a}/3 x³ + ${b}x² + ${c}x + C`});
+                variants.push({topic, type:'Generated definite integral',
+                    q:`Evaluate ∫ from 0 to ${c} of ${a}x dx.`,
+                    a:String(a*c*c/2)});
+            } else if (topic === 'Applications of Derivatives') {
+                variants.push({topic, type:'Generated marginal cost',
+                    q:`If C(x)=${a}x²+${b}x+${c}, find C′(${c}).`,
+                    a:String(2*a*c+b)});
+            } else if (topic === 'Techniques of Integration') {
+                variants.push({topic, type:'Generated substitution',
+                    q:`Evaluate ∫${a}x(${a}x²+${b})⁴ dx.`,
+                    a:`(${a}x²+${b})⁵/10 + C`});
+            } else if (topic === 'Applications of Integrals') {
+                variants.push({topic, type:'Generated average value',
+                    q:`Find average value of f(x)=${a}x+${b} on [0, ${c}].`,
+                    a:String(a*c/2+b)});
+            }
+        }
+        return variants;
     }
-  }
-  return variants;
-}
 
-let current=[], selectedTitle='', selectedDuration=60, selectedPoints=5, selectedTopic='ALL';
+    let current=[], selectedTitle='', selectedDuration=60, selectedPoints=5, selectedTopic='ALL';
 
-const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
-function activate(tab){document.querySelectorAll('.tab').forEach(el=>{const yes=el.dataset.tab===tab;el.classList.toggle('active',yes);el.setAttribute('aria-selected',String(yes));});document.querySelectorAll('.tab-panel').forEach(el=>el.classList.toggle('active',el.id===tab));}
-document.querySelectorAll('.tab').forEach(el=>el.addEventListener('click',()=>activate(el.dataset.tab)));
-$('topic').innerHTML='<option value="ALL">All topics (mixed test)</option>'+names.map((n,i)=>`<option value="${i}">${escapeHtml(n)}</option>`).join('');
-$('metric-topics').textContent=names.length;
-$('metric-types').textContent=Object.values(bank).reduce((n,rows)=>n+rows.length,0);
-$('topic-grid').innerHTML=names.map((n,i)=>`<button type="button" class="topic-card" data-topic="${i}"><span class="topic-number">${String(i+1).padStart(2,'0')}</span><strong>${escapeHtml(n)}</strong><span>${bank[n].length} question types</span><span class="topic-link">Select topic →</span></button>`).join('');
-document.querySelectorAll('.topic-card').forEach(el=>el.addEventListener('click',()=>{$('topic').value=el.dataset.topic;activate('builder');$('topic').focus();}));
-$('go-topics').addEventListener('click',()=>activate('topics'));
-$('go-preview').addEventListener('click',()=>activate('preview'));
-$('preview-key').addEventListener('click',()=>activate('answers'));
-$('count').addEventListener('change',()=>{$('metric-questions').textContent=$('count').value;});
-function generate(){
- const count=Number($('count').value), topicIndex=$('topic').value;
- selectedTopic=topicIndex==='ALL'?'Mixed Calculus':names[Number(topicIndex)];
- let pool=(topicIndex==='ALL'?names:[names[Number(topicIndex)]]).flatMap(n=>[...bank[n].map(([type,q,a])=>({topic:n,type,q,a})),...numericalVariants(n)]);
- if(!pool.length){$('status').textContent='No questions available for this topic.';return;}
- current=[];
- while(current.length<count){const round=shuffle([...pool]);current.push(...round.slice(0,count-current.length));}
- if($('shuffle').checked)shuffle(current);
- selectedTitle=$('title').value.trim()||'Calculus Assessment';
- selectedDuration=Math.max(1,Number($('duration').value)||60);
- selectedPoints=Math.max(1,Number($('points').value)||5);
- $('test-heading').textContent=selectedTitle;
- $('test-output').classList.remove('placeholder');
- $('test-output').innerHTML=`<div class="test-meta"><p><strong>Name:</strong> __________________________________ <strong>Date:</strong> _______________</p><p><strong>Topic:</strong> ${escapeHtml(selectedTopic)} &nbsp; <strong>Duration:</strong> ${selectedDuration} minutes &nbsp; <strong>Total:</strong> ${count*selectedPoints} points</p></div>`+current.map((item,i)=>`<article class="question"><div class="question-label">${escapeHtml(item.topic)} · ${escapeHtml(item.type)}</div><p><strong>${i+1}.</strong> ${escapeHtml(item.q)} <span class="point-label">(${selectedPoints} points)</span></p><div class="student-work"><label for="student-answer-${i}">Your answer / working</label><textarea id="student-answer-${i}" class="student-answer" data-index="${i}" rows="3" placeholder="Type your answer and any calculations here..."></textarea><div class="student-controls"><button type="button" class="check-answer" data-index="${i}">Check answer</button><button type="button" class="ask-question" data-index="${i}">Explain in chatbot</button></div><div class="answer-feedback" id="feedback-${i}" aria-live="polite"></div></div></article>`).join('');
- $('answer-output').classList.remove('placeholder');
- $('answer-output').innerHTML=`<div class="test-meta"><strong>${escapeHtml(selectedTitle)}</strong><p>${escapeHtml(selectedTopic)} · ${count} questions · ${count*selectedPoints} points</p></div>`+current.map((item,i)=>`<article class="key-row"><strong>${i+1}.</strong> ${escapeHtml(item.a)}<div class="question-label">${escapeHtml(item.type)}</div></article>`).join('');
- $('chat-question').innerHTML='<option value="">Choose a question (optional)</option>'+current.map((item,i)=>`<option value="${i}">Question ${i+1}: ${escapeHtml(item.q.slice(0,72))}</option>`).join('');
- $('status').textContent=`Test generated successfully: ${count} questions. Open Test Preview to review.`;
- activate('preview');
-}
-$('generate').addEventListener('click',generate);
+    const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+    function activate(tab){document.querySelectorAll('.tab').forEach(el=>{const yes=el.dataset.tab===tab;el.classList.toggle('active',yes);el.setAttribute('aria-selected',String(yes));});document.querySelectorAll('.tab-panel').forEach(el=>el.classList.toggle('active',el.id===tab));}
+    document.querySelectorAll('.tab').forEach(el=>el.addEventListener('click',()=>activate(el.dataset.tab)));
+    $('topic').innerHTML='<option value="ALL">All topics (mixed test)</option>'+names.map((n,i)=>`<option value="${i}">${escapeHtml(n)}</option>`).join('');
+    $('metric-topics').textContent=names.length;
+    $('metric-types').textContent=Object.values(bank).reduce((n,rows)=>n+rows.length,0);
+    $('topic-grid').innerHTML=names.map((n,i)=>`<button type="button" class="topic-card" data-topic="${i}"><span class="topic-number">${String(i+1).padStart(2,'0')}</span><strong>${escapeHtml(n)}</strong><span>${bank[n].length} question types</span><span class="topic-link">Select topic →</span></button>`).join('');
+    document.querySelectorAll('.topic-card').forEach(el=>el.addEventListener('click',()=>{$('topic').value=el.dataset.topic;activate('builder');$('topic').focus();}));
+    $('go-topics').addEventListener('click',()=>activate('topics'));
+    $('go-preview').addEventListener('click',()=>activate('preview'));
+    $('preview-key').addEventListener('click',()=>activate('answers'));
+    $('count').addEventListener('change',()=>{$('metric-questions').textContent=$('count').value;});
+    function generate(){
+        const count=Number($('count').value), topicIndex=$('topic').value;
+        selectedTopic=topicIndex==='ALL'?'Mixed Calculus':names[Number(topicIndex)];
+        let pool=(topicIndex==='ALL'?names:[names[Number(topicIndex)]]).flatMap(n=>[...bank[n].map(([type,q,a])=>({topic:n,type,q,a})),...numericalVariants(n)]);
+        if(!pool.length){$('status').textContent='No questions available for this topic.';return;}
+        current=[];
+        while(current.length<count){const round=shuffle([...pool]);current.push(...round.slice(0,count-current.length));}
+        if($('shuffle').checked)shuffle(current);
+        selectedTitle=$('title').value.trim()||'Calculus Assessment';
+        selectedDuration=Math.max(1,Number($('duration').value)||60);
+        selectedPoints=Math.max(1,Number($('points').value)||5);
+        $('test-heading').textContent=selectedTitle;
+        $('test-output').classList.remove('placeholder');
+        $('test-output').innerHTML=`<div class="test-meta"><p><strong>Name:</strong> __________________________________ <strong>Date:</strong> _______________</p><p><strong>Topic:</strong> ${escapeHtml(selectedTopic)} &nbsp; <strong>Duration:</strong> ${selectedDuration} minutes &nbsp; <strong>Total:</strong> ${count*selectedPoints} points</p></div>`+current.map((item,i)=>`<article class="question"><div class="question-label">${escapeHtml(item.topic)} · ${escapeHtml(item.type)}</div><p><strong>${i+1}.</strong> ${escapeHtml(item.q)} <span class="point-label">(${selectedPoints} points)</span></p><div class="student-work"><label for="student-answer-${i}">Your answer / working</label><textarea id="student-answer-${i}" class="student-answer" data-index="${i}" rows="3" placeholder="Type your answer and any calculations here..."></textarea><div class="student-controls"><button type="button" class="check-answer" data-index="${i}">Check answer</button><button type="button" class="ask-question" data-index="${i}">Explain in chatbot</button></div><div class="answer-feedback" id="feedback-${i}" aria-live="polite"></div></div></article>`).join('');
+        $('answer-output').classList.remove('placeholder');
+        $('answer-output').innerHTML=`<div class="test-meta"><strong>${escapeHtml(selectedTitle)}</strong><p>${escapeHtml(selectedTopic)} · ${count} questions · ${count*selectedPoints} points</p></div>`+current.map((item,i)=>`<article class="key-row"><strong>${i+1}.</strong> ${escapeHtml(item.a)}<div class="question-label">${escapeHtml(item.type)}</div></article>`).join('');
+        $('chat-question').innerHTML='<option value="">Choose a question (optional)</option>'+current.map((item,i)=>`<option value="${i}">Question ${i+1}: ${escapeHtml(item.q.slice(0,72))}</option>`).join('');
+        $('status').textContent=`Test generated successfully: ${count} questions. Open Test Preview to review.`;
+        activate('preview');
+    }
+    $('generate').addEventListener('click',generate);
 
-function printView(which){if(!current.length){alert('Please generate a test first.');activate('builder');return;}activate(which);document.body.dataset.print=which;window.print();}
-$('print').addEventListener('click',()=>printView('preview'));
-$('keyprint').addEventListener('click',()=>printView('answers'));
-window.addEventListener('afterprint',()=>{delete document.body.dataset.print;});
+    function printView(which){if(!current.length){alert('Please generate a test first.');activate('builder');return;}activate(which);document.body.dataset.print=which;window.print();}
+    $('print').addEventListener('click',()=>printView('preview'));
+    $('keyprint').addEventListener('click',()=>printView('answers'));
+    window.addEventListener('afterprint',()=>{delete document.body.dataset.print;});
 
 
-// Student workspace and local, question-bank-based calculus tutor.
-// No external AI service or API key is required.
-function normalizeAnswer(value) {
-  return String(value).toLowerCase().replace(/\s+/g,'')
-    .replace(/[−–]/g,'-').replace(/×/g,'*').replace(/÷/g,'/')
-    .replace(/\^/g,'').replace(/²/g,'2').replace(/³/g,'3')
-    .replace(/\bplusc\b/g,'+c').replace(/\*/g,'');
-}
-function numericAnswer(value) {
-  const s=normalizeAnswer(value);
-  if (/^[+-]?\d+(\.\d+)?(\/[+-]?\d+(\.\d+)?)?$/.test(s)) {
-    const bits=s.split('/');return Number(bits[0])/(bits.length===2?Number(bits[1]):1);
-  }
-  return null;
-}
-function answerMatches(given, expected) {
-  const a=normalizeAnswer(given), b=normalizeAnswer(expected);
-  if (!a) return false;
-  if (a===b) return true;
-  const x=numericAnswer(given), y=numericAnswer(expected);
-  return x!==null && y!==null && Number.isFinite(x) && Number.isFinite(y) && Math.abs(x-y)<1e-8;
-}
-function explainQuestion(item) {
-  const q=item.q, a=item.a, t=item.topic;
-  const lines=[];
-  if (/Generated factoring limit/.test(item.type)) {
-    const c=q.match(/x→(\d+)/)?.[1];
-    lines.push('Step 1: Recognize the difference of squares: x² − a² = (x − a)(x + a).',
-      `Step 2: Factor the numerator and cancel the common (x − ${c||'a'}) factor for x ≠ ${c||'a'}.`,
-      `Step 3: Substitute x = ${c||'a'} into the simplified expression x + ${c||'a'}.`);
-  } else if (/Generated polynomial limit/.test(item.type) || (t.includes('Limits') && /substitution/i.test(item.type))) {
-    lines.push('Step 1: Check whether the expression is continuous at the approach value.',
-      'Step 2: Substitute the approach value for x into each term.',
-      'Step 3: Evaluate powers, multiplication, and addition or subtraction.');
-  } else if (/Generated derivative at a point/.test(item.type)) {
-    lines.push('Step 1: Differentiate each term using d(xⁿ)/dx = nxⁿ⁻¹.',
-      'Step 2: Simplify the derivative f′(x).',
-      'Step 3: Substitute the requested x-value into f′(x).');
-  } else if (/Generated power rule/.test(item.type) || t==='Derivatives') {
-    lines.push('Step 1: Identify the function and the differentiation rule required.',
-      'Step 2: Apply the power rule d(axⁿ)/dx = anxⁿ⁻¹ term by term when applicable.',
-      'Step 3: Simplify the resulting expression; use product, quotient, or chain rules when needed.');
-  } else if (/Generated definite integral/.test(item.type)) {
-    lines.push('Step 1: Find an antiderivative using ∫xⁿ dx = xⁿ⁺¹/(n+1).',
-      'Step 2: Evaluate the antiderivative at the upper bound.',
-      'Step 3: Subtract its value at the lower bound.');
-  } else if (/Generated indefinite integral/.test(item.type) || t==='Integrals') {
-    lines.push('Step 1: Integrate each term separately using the appropriate integration rule.',
-      'Step 2: Increase each power by one and divide by the new power, when using the power rule.',
-      'Step 3: Combine the terms and add the constant of integration C for indefinite integrals.');
-  } else if (/Generated substitution/.test(item.type)) {
-    lines.push('Step 1: Set u equal to the expression inside the parentheses.',
-      'Step 2: Compute du and replace the matching x dx factor.',
-      'Step 3: Integrate the resulting power of u and substitute the original expression back.');
-  } else if (/Generated average value/.test(item.type)) {
-    lines.push('Step 1: Use the average-value formula (1/(b−a)) ∫ from a to b f(x) dx.',
-      'Step 2: Integrate f(x) and evaluate at both endpoints.',
-      'Step 3: Divide by the interval length b−a.');
-  } else if (/Generated marginal cost/.test(item.type)) {
-    lines.push('Step 1: Differentiate the cost function C(x) term by term.',
-      'Step 2: Evaluate C′(x) at the requested production level.',
-      'Step 3: Interpret the result as marginal cost.');
-  } else if (t.includes('Limits')) {
-    lines.push('Step 1: Try direct substitution.',
-      'Step 2: If the result is indeterminate, consider factoring, rationalizing, or a standard limit identity.',
-      'Step 3: Evaluate the simplified limit, paying attention to one-sided behavior.');
-  } else if (t.includes('Integration') || t.includes('Integrals')) {
-    lines.push('Step 1: Identify whether substitution, integration by parts, or a geometric formula applies.',
-      'Step 2: Set up the corresponding integral and evaluate it.',
-      'Step 3: Check bounds, units, and the constant C where appropriate.');
-  } else {
-    lines.push('Step 1: Identify the relevant calculus definition or theorem.',
-      'Step 2: Substitute the information from the problem and simplify.',
-      'Step 3: Check the result against the question’s conditions.');
-  }
-  return `Question: ${q}\n\n${lines.join('\n')}\n\nAnswer in the question bank: ${a}\n\nNote: These are rule-based guidance steps. For some original questions, they describe the method rather than every algebraic intermediate step.`;
-}
-function tutorReply(text, selectedIndex) {
-  if (!current.length) return 'Generate a test first so I can use its questions and answer key.';
-  const input=text.trim();
-  if (!input && selectedIndex===null) return 'Enter a calculus question or choose a question number.';
-  let idx=selectedIndex;
-  if (idx===null) {
-    const number=input.match(/^(?:question\s*|q\s*|#)(\d+)\b/i);
-    if (number && Number(number[1])>=1 && Number(number[1])<=current.length) idx=Number(number[1])-1;
-    if (idx===null) idx=current.findIndex(item=>item.q.toLowerCase()===input.toLowerCase());
-    if (idx===-1) idx=current.findIndex(item=>input.length>12 && (item.q.toLowerCase().includes(input.toLowerCase()) || input.toLowerCase().includes(item.q.toLowerCase())));
-  }
-  if (idx===null || idx<0 || idx>=current.length) return 'I can explain questions from the generated test. Select a question from the menu, enter “Question 1”, or paste its exact question text.';
-  return explainQuestion(current[idx]);
-}
-function appendChat(role, message) {
-  const node=document.createElement('div');node.className='chat-message '+role;
-  node.textContent=message;$('chat-history').appendChild(node);
-  $('chat-history').scrollTop=$('chat-history').scrollHeight;
-}
-function askTutor(index=null) {
-  if (index!==null) $('chat-question').value=String(index);
-  const raw=$('chat-input').value;
-  const indexFromSelect=$('chat-question').value;
-  const chosen=index!==null?index:(indexFromSelect===''?null:Number(indexFromSelect));
-  appendChat('student',raw.trim()||(chosen!==null?`Please explain question ${chosen+1}.`:'Please explain this question.'));
-  appendChat('tutor',tutorReply(raw,chosen));
-  $('chat-input').value='';
-}
-$('test-output').addEventListener('click',event=>{
-  const check=event.target.closest('.check-answer');
-  const ask=event.target.closest('.ask-question');
-  if(check){
-    const i=Number(check.dataset.index), given=$('student-answer-'+i).value.trim();
-    const feedback=$('feedback-'+i);
-    feedback.className='answer-feedback '+(!given?'':answerMatches(given,current[i].a)?'correct':'incorrect');
-    feedback.textContent=!given?'Please type your answer first.':answerMatches(given,current[i].a)?'Correct answer!':'Not matched to the answer key. Review your work or use the chatbot for guidance. Equivalent symbolic forms may need instructor review.';
-  }
-  if(ask){const i=Number(ask.dataset.index);$('chat-question').value=String(i);askTutor(i);$('chat-panel').scrollIntoView({behavior:'smooth',block:'start'});}
-});
-$('chat-send').addEventListener('click',()=>askTutor());
-$('chat-input').addEventListener('keydown',event=>{if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();askTutor();}});
+    // Student workspace and local, question-bank-based calculus tutor.
+    // No external AI service or API key is required.
+    function normalizeAnswer(value) {
+        return String(value).toLowerCase().replace(/\s+/g,'')
+            .replace(/[−–]/g,'-').replace(/×/g,'*').replace(/÷/g,'/')
+            .replace(/\^/g,'').replace(/²/g,'2').replace(/³/g,'3')
+            .replace(/\bplusc\b/g,'+c').replace(/\*/g,'');
+    }
+    function numericAnswer(value) {
+        const s=normalizeAnswer(value);
+        if (/^[+-]?\d+(\.\d+)?(\/[+-]?\d+(\.\d+)?)?$/.test(s)) {
+            const bits=s.split('/');return Number(bits[0])/(bits.length===2?Number(bits[1]):1);
+        }
+        return null;
+    }
+    function answerMatches(given, expected) {
+        const a=normalizeAnswer(given), b=normalizeAnswer(expected);
+        if (!a) return false;
+        if (a===b) return true;
+        const x=numericAnswer(given), y=numericAnswer(expected);
+        return x!==null && y!==null && Number.isFinite(x) && Number.isFinite(y) && Math.abs(x-y)<1e-8;
+    }
+    function explainQuestion(item) {
+        const q=item.q, a=item.a, t=item.topic;
+        const lines=[];
+        if (/Generated factoring limit/.test(item.type)) {
+            const c=q.match(/x→(\d+)/)?.[1];
+            lines.push('Step 1: Recognize the difference of squares: x² − a² = (x − a)(x + a).',
+                `Step 2: Factor the numerator and cancel the common (x − ${c||'a'}) factor for x ≠ ${c||'a'}.`,
+                `Step 3: Substitute x = ${c||'a'} into the simplified expression x + ${c||'a'}.`);
+        } else if (/Generated polynomial limit/.test(item.type) || (t.includes('Limits') && /substitution/i.test(item.type))) {
+            lines.push('Step 1: Check whether the expression is continuous at the approach value.',
+                'Step 2: Substitute the approach value for x into each term.',
+                'Step 3: Evaluate powers, multiplication, and addition or subtraction.');
+        } else if (/Generated derivative at a point/.test(item.type)) {
+            lines.push('Step 1: Differentiate each term using d(xⁿ)/dx = nxⁿ⁻¹.',
+                'Step 2: Simplify the derivative f′(x).',
+                'Step 3: Substitute the requested x-value into f′(x).');
+        } else if (/Generated power rule/.test(item.type) || t==='Derivatives') {
+            lines.push('Step 1: Identify the function and the differentiation rule required.',
+                'Step 2: Apply the power rule d(axⁿ)/dx = anxⁿ⁻¹ term by term when applicable.',
+                'Step 3: Simplify the resulting expression; use product, quotient, or chain rules when needed.');
+        } else if (/Generated definite integral/.test(item.type)) {
+            lines.push('Step 1: Find an antiderivative using ∫xⁿ dx = xⁿ⁺¹/(n+1).',
+                'Step 2: Evaluate the antiderivative at the upper bound.',
+                'Step 3: Subtract its value at the lower bound.');
+        } else if (/Generated indefinite integral/.test(item.type) || t==='Integrals') {
+            lines.push('Step 1: Integrate each term separately using the appropriate integration rule.',
+                'Step 2: Increase each power by one and divide by the new power, when using the power rule.',
+                'Step 3: Combine the terms and add the constant of integration C for indefinite integrals.');
+        } else if (/Generated substitution/.test(item.type)) {
+            lines.push('Step 1: Set u equal to the expression inside the parentheses.',
+                'Step 2: Compute du and replace the matching x dx factor.',
+                'Step 3: Integrate the resulting power of u and substitute the original expression back.');
+        } else if (/Generated average value/.test(item.type)) {
+            lines.push('Step 1: Use the average-value formula (1/(b−a)) ∫ from a to b f(x) dx.',
+                'Step 2: Integrate f(x) and evaluate at both endpoints.',
+                'Step 3: Divide by the interval length b−a.');
+        } else if (/Generated marginal cost/.test(item.type)) {
+            lines.push('Step 1: Differentiate the cost function C(x) term by term.',
+                'Step 2: Evaluate C′(x) at the requested production level.',
+                'Step 3: Interpret the result as marginal cost.');
+        } else if (t.includes('Limits')) {
+            lines.push('Step 1: Try direct substitution.',
+                'Step 2: If the result is indeterminate, consider factoring, rationalizing, or a standard limit identity.',
+                'Step 3: Evaluate the simplified limit, paying attention to one-sided behavior.');
+        } else if (t.includes('Integration') || t.includes('Integrals')) {
+            lines.push('Step 1: Identify whether substitution, integration by parts, or a geometric formula applies.',
+                'Step 2: Set up the corresponding integral and evaluate it.',
+                'Step 3: Check bounds, units, and the constant C where appropriate.');
+        } else {
+            lines.push('Step 1: Identify the relevant calculus definition or theorem.',
+                'Step 2: Substitute the information from the problem and simplify.',
+                'Step 3: Check the result against the question’s conditions.');
+        }
+        return `Question: ${q}\n\n${lines.join('\n')}\n\nAnswer in the question bank: ${a}\n\nNote: These are rule-based guidance steps. For some original questions, they describe the method rather than every algebraic intermediate step.`;
+    }
+    function tutorReply(text, selectedIndex) {
+        if (!current.length) return 'Generate a test first so I can use its questions and answer key.';
+        const input=text.trim();
+        if (!input && selectedIndex===null) return 'Enter a calculus question or choose a question number.';
+        let idx=selectedIndex;
+        if (idx===null) {
+            const number=input.match(/^(?:question\s*|q\s*|#)(\d+)\b/i);
+            if (number && Number(number[1])>=1 && Number(number[1])<=current.length) idx=Number(number[1])-1;
+            if (idx===null) idx=current.findIndex(item=>item.q.toLowerCase()===input.toLowerCase());
+            if (idx===-1) idx=current.findIndex(item=>input.length>12 && (item.q.toLowerCase().includes(input.toLowerCase()) || input.toLowerCase().includes(item.q.toLowerCase())));
+        }
+        if (idx===null || idx<0 || idx>=current.length) return 'I can explain questions from the generated test. Select a question from the menu, enter “Question 1”, or paste its exact question text.';
+        return explainQuestion(current[idx]);
+    }
+    function appendChat(role, message) {
+        const node=document.createElement('div');node.className='chat-message '+role;
+        node.textContent=message;$('chat-history').appendChild(node);
+        $('chat-history').scrollTop=$('chat-history').scrollHeight;
+    }
+    function askTutor(index=null) {
+        if (index!==null) $('chat-question').value=String(index);
+        const raw=$('chat-input').value;
+        const indexFromSelect=$('chat-question').value;
+        const chosen=index!==null?index:(indexFromSelect===''?null:Number(indexFromSelect));
+        appendChat('student',raw.trim()||(chosen!==null?`Please explain question ${chosen+1}.`:'Please explain this question.'));
+        appendChat('tutor',tutorReply(raw,chosen));
+        $('chat-input').value='';
+    }
+    $('test-output').addEventListener('click',event=>{
+        const check=event.target.closest('.check-answer');
+        const ask=event.target.closest('.ask-question');
+        if(check){
+            const i=Number(check.dataset.index), given=$('student-answer-'+i).value.trim();
+            const feedback=$('feedback-'+i);
+            feedback.className='answer-feedback '+(!given?'':answerMatches(given,current[i].a)?'correct':'incorrect');
+            feedback.textContent=!given?'Please type your answer first.':answerMatches(given,current[i].a)?'Correct answer!':'Not matched to the answer key. Review your work or use the chatbot for guidance. Equivalent symbolic forms may need instructor review.';
+        }
+        if(ask){const i=Number(ask.dataset.index);$('chat-question').value=String(i);askTutor(i);$('chat-panel').scrollIntoView({behavior:'smooth',block:'start'});}
+    });
+    $('chat-send').addEventListener('click',()=>askTutor());
+    $('chat-input').addEventListener('keydown',event=>{if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();askTutor();}});
 
 </script>
- </body>
+</body>
 </html>
 
