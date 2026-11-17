@@ -472,94 +472,94 @@ footer {
 }
 
 @media(max-width:850px) {
-    .workspace {
-        grid-template-columns:1fr
-    }
+.workspace {
+    grid-template-columns:1fr
+}
 
-    .hero-icon {
-        display:none
-    }
+.hero-icon {
+    display:none
+}
 
-    .welcome {
-        padding:27px
-    }
+.welcome {
+    padding:27px
+}
 
-    .preview-toolbar {
-        align-items:flex-start;
-        flex-direction:column
-    }
+.preview-toolbar {
+    align-items:flex-start;
+    flex-direction:column
+}
 
 
 }
 
 @media(max-width:520px) {
-    .header-tag {
-        display:none
-    }
+.header-tag {
+    display:none
+}
 
-    .card {
-        padding:20px
-    }
+.card {
+    padding:20px
+}
 
-    .metrics {
-        grid-template-columns:1fr 1fr
-    }
+.metrics {
+    grid-template-columns:1fr 1fr
+}
 
-    .topic-grid {
-        grid-template-columns:1fr
-    }
+.topic-grid {
+    grid-template-columns:1fr
+}
 
-    .tabs {
-        gap:5px
-    }
+.tabs {
+    gap:5px
+}
 
-    .tab {
-        padding:10px 12px;
-        font-size:13px
-    }
+.tab {
+    padding:10px 12px;
+    font-size:13px
+}
 
-    .two-fields {
-        grid-template-columns:1fr
-    }
+.two-fields {
+    grid-template-columns:1fr
+}
 
 
 }
 
 @media print {
-    body {
-        background:white
-    }
+body {
+    background:white
+}
 
-    header,.welcome,.tabs,footer,.preview-toolbar .actions,.settings,.overview {
-        display:none!important
-    }
+header,.welcome,.tabs,footer,.preview-toolbar .actions,.settings,.overview {
+    display:none!important
+}
 
-    main {
-        padding:0;
-        max-width:none
-    }
+main {
+    padding:0;
+    max-width:none
+}
 
-    .card {
-        padding:0;
-        border:none;
-        box-shadow:none
-    }
+.card {
+    padding:0;
+    border:none;
+    box-shadow:none
+}
 
-    .tab-panel {
-        display:none!important
-    }
+.tab-panel {
+    display:none!important
+}
 
-    .tab-panel.active {
-        display:block!important
-    }
+.tab-panel.active {
+    display:block!important
+}
 
-    .question {
-        break-inside:avoid
-    }
+.question {
+    break-inside:avoid
+}
 
-    .paper {
-        border:none
-    }
+.paper {
+    border:none
+}
 
 
 }
